@@ -1,5 +1,5 @@
 #! python3
-# pyro.py is a program which automatically run git pull for the
+# lc.py is a program which automatically run git pull for the
 # defined directories. It helps you in situations like where you
 # manually have to pull git commits on your several application
 # instances at a time.
