@@ -1,4 +1,6 @@
 import sys
+from colr import color
+import colors
 
 
 def control(dirs) -> None:
@@ -13,30 +15,36 @@ def control(dirs) -> None:
             dirs['list'] += list(directories)
         except KeyError as error:
             dirs['list'] = directories.copy()
-        print(f"Success! Current directories: {dirs['list']}")
+        print(color(f"Success! Current directories: {dirs['list']}", fore=colors.SUCCESS))
     elif sys.argv[2].lower() == 'list':
         # Show existing list of directories
         try:
-            print('Listing directories...')
-            print(dirs['list'])
+            print(color('Listing directories...', fore=colors.INFO))
+            dirs = dirs['list'].copy()
+            
+            if len(sys.argv) > 3 and sys.argv[3].lower() == 'alpha':
+                dirs.sort()
+            
+            for dir in dirs:
+                print(f"{dir}")
         except KeyError as error:
-            print('No saved directories found!')
+            print(color('No saved directories found!', fore=colors.DANGER))
     elif sys.argv[2].lower() == 'clear' and len(sys.argv) == 3:
         # Clear total list of directories
         dirs.clear()
-        print('Directory list cleared!')
+        print(color('Directory list cleared!', fore=colors.SUCCESS))
     elif sys.argv[2].lower() == 'clear' and len(sys.argv) > 3:
         # Delete specified directories
         try:
             mod = dirs['list'].copy()
             for name in sys.argv[3:len(sys.argv)]:
-                print(f"Removing {name}...")
+                print(color(f"Removing {name}...", fore=colors.WARNING))
                 mod.remove(name)
             dirs['list'] = mod.copy()
+            print(color(f"Success! Current directories: {dirs['list']}", fore=colors.SUCCESS))
         except KeyError as error:
-            print('No saved directory is found!')
+            print(color('No saved directory is found!', fore=colors.DANGER))
         except ValueError as error:
-            print('Directory is not found in list!')
-        print(f"Success! Current directories: {dirs['list']}")
+            print(color('Directory is not found in list!', fore=colors.DANGER))
     else:
-        print('Invalid operation!')
+        print(color('Invalid operation!', fore=colors.DANGER))

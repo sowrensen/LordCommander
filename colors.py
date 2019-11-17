@@ -1,0 +1,4 @@
+SUCCESS = '00ff7f'
+INFO = '25a7fd'
+DANGER = 'f74759'
+WARNING = 'f7f73e'
