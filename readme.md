@@ -1,4 +1,4 @@
-#LordCommander
+# LordCommander
 
 LordCommander is a command line program to run a shell command recursively through predefined
 directories.
@@ -15,7 +15,7 @@ directories.
 ```
 git clone https://sowrensen@github.com/sowrensen/lordcommander.git
 cd lordcommander
-chmode +x lc.py
+chmod +x lc.py
 ./lc <key> <value>
 ```
 
