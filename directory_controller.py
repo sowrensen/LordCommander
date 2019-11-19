@@ -1,6 +1,6 @@
 import sys
 from colr import color
-import colors
+import colors2 as colors
 
 
 def control(dirs) -> None:

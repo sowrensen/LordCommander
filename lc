@@ -11,10 +11,12 @@ import shelve
 import os
 import sys
 from colr import color
-import colors
+import colors2 as colors
 import directory_controller
 import credential_controller
 import command_controller
+
+from controllers import DirectoryController, CommandController
 
 if not os.path.exists('.files'):
     os.mkdir('.files')
@@ -31,14 +33,18 @@ def run() -> None:
         # read argument
         option = sys.argv[1]
         if option == 'dirs' and len(sys.argv) > 2:
-            directory_controller.control(dirs)
+            # directory_controller.control(dirs)
+            dc = DirectoryController(dirs)
+            # dc.control()
         elif option == 'creds' and len(sys.argv) > 2:
             credential_controller.control(creds)
         elif option == 'run' and len(sys.argv) == 3:
-            command_controller.control(sys.argv[2], dirs, creds)
+            # command_controller.control(sys.argv[2], dirs, creds)
+            cc = CommandController(sys.argv[2], dirs, creds)
+            cc.run()
         else:
             print(color('Invalid operation!', fore=colors.DANGER))
-    
+
     except IndexError as error:
         # no argument found
         print(color('Invalid operation!', fore=colors.DANGER))

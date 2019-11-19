@@ -1,6 +1,6 @@
 import os
 from colr import color
-import colors
+import colors2 as colors
 
 
 def control(cmd: str, dirs, creds) -> None:
