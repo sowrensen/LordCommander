@@ -1,18 +1,21 @@
 """
-    This control module holds all of the controllers. There are four Controller classes
-    declared here. Three of them are subcontrollers, while the first one is primary.
+=========================================================
+controllers.py
+=========================================================
+This control module holds all of the controllers. There are four Controller classes
+declared here. Three of them are subcontrollers, while the first one is primary.
 
-    The Controller class has two functions. First, decide which subcontroller to initiate,
-    and second, which method to call. The main program should only deal with this 
-    controller and call the pilot method.
+The Controller class has two functions. First, decide which subcontroller to initiate,
+and second, which method to call. The main program should only deal with this 
+controller and call the pilot method.
 
-    The DirectoryController is responsible for performing all of the directory related 
-    functions as its name suggests.
+The DirectoryController is responsible for performing all of the directory related 
+functions as its name suggests.
 
-    The CredentialController accounts for credential related tasks as its name suggests.
+The CredentialController accounts for credential related tasks as its name suggests.
 
-    And finally, the CommandController class runs the passed command throughout the saved
-    directories using saved credentials.
+And finally, the CommandController class runs the passed command throughout the saved
+directories using saved credentials.
 """
 import sys
 import os
