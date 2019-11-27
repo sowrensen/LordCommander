@@ -1,8 +1,8 @@
 class ColorCodes:
     """
-    Defines color codes for terminal outputs
+    Defines color codes for terminal outputs.
     """
-    
+
     NORMAL = 'eaebf7'
     SUCCESS = '00ff7f'
     INFO = '25a7fd'

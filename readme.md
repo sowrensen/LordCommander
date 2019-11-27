@@ -5,6 +5,10 @@ directories.
 
 ## Changelog
 
+#### Version 2.0
+- Rewritten modules.
+- Updated code structure.
+
 #### Version 1.1
 - Added alphabetical sorting for directory list.
 - Added colored output to distinguish between errors, infos, warnings, and success messages.
@@ -18,6 +22,10 @@ cd lordcommander
 chmod +x lc.py
 ./lc <key> <value>
 ```
+
+## Todo
+- Add counter for successful runs and failed runs.
+- Count directories.
 
 ## Usage
 

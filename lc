@@ -1,53 +1,44 @@
 #! /usr/bin/env python3.7
-#
-# LordCommander is a python program to run a shell command recursively through predefined directories.
-# Version: 1.0
-# Author: Sowren Sen
-# Email: sowrensen@gmail.com
-#
+"""
+    =========================================================
+    LordCommander
+    =========================================================
+    LordCommander is a python program to run a shell command 
+    recursively through predefined directories.
+
+    Version: 2.0
+    Author: Sowren Sen
+    Email: sowrensen@gmail.com
+"""
 
 
 import shelve
 import os
 import sys
-from colr import color
-import colors2 as colors
-import directory_controller
-import credential_controller
-import command_controller
-
-from controllers import DirectoryController, CommandController
-
-if not os.path.exists('.files'):
-    os.mkdir('.files')
-
-creds = shelve.open('./.files/creds')
-dirs = shelve.open('./.files/dirs')
+from controllers import Controller
 
 
-def run() -> None:
-    """Run controllers according to command line argument
-    :return None
-    """
-    try:
-        # read argument
-        option = sys.argv[1]
-        if option == 'dirs' and len(sys.argv) > 2:
-            # directory_controller.control(dirs)
-            dc = DirectoryController(dirs)
-            # dc.control()
-        elif option == 'creds' and len(sys.argv) > 2:
-            credential_controller.control(creds)
-        elif option == 'run' and len(sys.argv) == 3:
-            # command_controller.control(sys.argv[2], dirs, creds)
-            cc = CommandController(sys.argv[2], dirs, creds)
-            cc.run()
-        else:
-            print(color('Invalid operation!', fore=colors.DANGER))
+class LordCommander:
+    """Event horizon of the program."""
+    # The shelve file for storing directories
+    dirs = None
+    # The shelve file for storing credentials
+    creds = None
 
-    except IndexError as error:
-        # no argument found
-        print(color('Invalid operation!', fore=colors.DANGER))
+    def read_files(self):
+        """Read files or create them if doesn't exist."""
+        if not os.path.exists('.files'):
+            os.mkdir('.files')
+        self.dirs = shelve.open('./.files/dirs')
+        self.creds = shelve.open('./.files/creds')
+
+    def main(self):
+        """Initiate and run main controller."""
+        self.read_files()
+        # Initiate and call main controller
+        call = Controller(self.dirs, self.creds, sys.argv[2])
+        call.pilot()
 
 
-run()
+lc = LordCommander()
+lc.main()
