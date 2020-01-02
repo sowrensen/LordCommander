@@ -1,4 +1,4 @@
-#! /usr/bin/env python3.7
+#! /usr/bin/env python3
 """
 =========================================================
 LordCommander
@@ -6,7 +6,7 @@ LordCommander
 LordCommander is a python program to run a shell command 
 recursively through predefined directories.
 
-Version: 2.0
+Version: 3.0
 Author: Sowren Sen
 Email: sowrensen@gmail.com
 """
