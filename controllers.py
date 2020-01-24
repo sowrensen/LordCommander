@@ -187,5 +187,5 @@ class CommandController:
             # If something goes wrong...
             Output.write(error, ColorCodes.DANGER)
         finally:
-            # Return to home like a good cat 🐈🐈🐈🐈
+            # Return to home like a good cat 🐈
             os.chdir(cwd)

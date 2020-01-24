@@ -20,7 +20,7 @@ from controllers import DirectoryController, CommandController
 
 class LordCommander:
     """
-    Run a shell command recursively throughout the predefined directories.
+    🐈 Run a shell command recursively throughout the predefined directories.
     """
     
     def __init__(self):
