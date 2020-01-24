@@ -1,266 +1,191 @@
 """
-=========================================================
-controllers.py
-=========================================================
-This control module holds all of the controllers. There are four Controller classes
-declared here. Three of them are subcontrollers, while the first one is primary.
-
-The Controller class has two functions. First, decide which subcontroller to initiate,
-and second, which method to call. The main program should only deal with this 
-controller and call the pilot method.
-
-The DirectoryController is responsible for performing all of the directory related 
-functions as its name suggests.
-
-The CredentialController accounts for credential related tasks as its name suggests.
-
-And finally, the CommandController class runs the passed command throughout the saved
-directories using saved credentials.
+| ---------------------------------------------------------------------
+| controllers.py
+| ---------------------------------------------------------------------
+| This control module holds all of the controllers. There are two
+| controller classes defined in this file. The DirectoryController
+| is responsible for performing all of the directory related tasks
+| as its name suggests. The CommandController class runs the passed
+| command throughout the saved directories using saved credentials.
+|
+| Version: 3.0
+| License: GNU General Public License 3
 """
-import sys
+
 import os
 from output import Output
 from color_codes import ColorCodes
-
-
-class Controller:
-    """
-    Controller class decides which subcontroller class to be initiated and which method is
-    to call. You should deal with this class only from outside to access the subclasses.
-    Call the pilot method after initiating the Controller class.
-    """
-
-    def __init__(self, dirs, creds, cmd):
-        self.dirs = dirs
-        self.creds = creds
-        self.cmd = cmd
-
-    def pilot(self):
-        """Decide which subcontroller to initiate."""
-        if sys.argv[1].lower() == 'dirs':
-            instance = DirectoryController(self.dirs)
-        elif sys.argv[1].lower() == 'creds':
-            instance = CredentialController(self.creds)
-        elif sys.argv[1].lower() == 'run':
-            instance = CommandController(self.cmd, self.dirs, self.creds)
-
-        self.control(instance)
-
-    def control(self, instance):
-        """Decide which method to call."""
-        if isinstance(instance, CommandController):
-            instance.make()
-        if sys.argv[2].lower() == 'add':
-            instance.add()
-        elif sys.argv[2].lower() == 'list':
-            instance.list()
-        elif sys.argv[2].lower() == 'clear':
-            instance.clear()
+from pathlib import Path
 
 
 class DirectoryController:
     """
-    This class controls and performs all of the directory related 
-    tasks according to the passed argument followed by dirs command.
+    Controls everything related to directories.
     """
-
+    
     def __init__(self, dirs):
         # dirs is a shelve module where all directory names are listed.
-        self.dirs = dirs
-
-    def add(self):
-        """Create new list of directories or append to the existing list."""
+        self._dirs = dirs
+    
+    def add(self, *args):
+        """
+        Add directories to the existing list or create a new list.
+        :param args: Names of directories
+        """
+        if len(args) <= 0:
+            Output.write(
+                "Aborting! No argument has been provided.", ColorCodes.DANGER)
+            return
         try:
-            directories = sys.argv[3:len(sys.argv)]
+            directories = list(set(filter(lambda dir: type(dir) is str, args)))
             # Append new directories to existing list
-            self.dirs['list'] += list(directories)
+            self._dirs['list'] += directories.copy()
         except KeyError as error:
             # If there is no existing list, an error should raise,
             # hence create a new list of directories.
-            self.dirs['list'] = directories.copy()
-        Output.write('Success!', ColorCodes.SUCCESS)
-        # Show new list
-        self.list()
-
-    def list(self):
-        """Show existing list of directories."""
-        sort = sys.argv[3].lower() if len(sys.argv) > 3 else None
+            self._dirs['list'] = directories.copy()
+        finally:
+            Output.write('Success!', ColorCodes.SUCCESS)
+            self.view()
+    
+    def view(self, sort=False):
+        """
+        View list of added directories.
+        :param sort: Sort alphabetically, false by default (optional)
+        """
         try:
             Output.write('Listing directories...', ColorCodes.INFO)
-            directories = self.dirs['list'].copy()
-
-            # Sort alphabetically if mentioned
-            if sort == 'alpha':
-                directories.sort()
-
-            for directory in directories:
-                Output.write(directory)
+            directories = self._dirs['list'].copy()
+            Output.write("{}\n".format('\n'.join(sorted(directories) if sort else directories)))
+            Output.write("Total %d directories listed." % len(directories))
         except KeyError as error:
             Output.write('No saved directory has been found!',
                          ColorCodes.DANGER)
-
-    def clear(self):
-        """Clear specified key(s) or entire list of directory."""
-        keys = sys.argv[3:len(sys.argv)].copy() if len(
-            sys.argv) > 3 else None
-        if keys is None:
-            # If no key is specified, remove entire list
-            self.dirs.clear()
-            Output.write('Directory list cleared!', ColorCodes.SUCCESS)
+    
+    def clear(self, *args, full=False):
+        """
+        Clears entire list or specified directories from the list.
+        :param args: Names of directories
+        :param full: If true, clears entire list. False by default (optional)
+        """
+        if len(args) <= 0 and not full:
+            Output.write(
+                "Aborting! No argument has been provided.", ColorCodes.DANGER)
             return
-
-        # Else, try to remove specified keys
+        # If flag full is true, remove entire list
+        if full:
+            # Ask for confirmation
+            Output.write("This will clear the entire list, are you sure? (yes/no) [no]:", ColorCodes.WARNING)
+            yes = {'yes', 'y'}
+            ans = input(">> ")
+            if ans in yes:
+                self._dirs.clear()
+                Output.write('Directory list cleared!', ColorCodes.SUCCESS)
+            else:
+                Output.write('Action aborted.', ColorCodes.INFO)
+            return
+        # Else remove specified keys only
         try:
-            # Copy the list into intermediate container
-            mod = self.dirs['list'].copy()
+            keys = set(filter(lambda dir: type(dir) is str, args))
+            # Copy the list into an intermediate container
+            mod = self._dirs['list'].copy()
             for key in keys:
+                if key not in mod:
+                    Output.write(f"{key} is not found in the list! Skiping...",
+                                 ColorCodes.DANGER)
+                    continue
                 Output.write(f"Removing {key}...", ColorCodes.WARNING)
                 mod.remove(key)
+                Output.write('Success!', ColorCodes.SUCCESS)
             # Restore directories after trimming
-            self.dirs['list'] = mod.copy()
-            Output.write('Success!', ColorCodes.SUCCESS)
-            # Show new list
-            self.list()
-        except ValueError as error:
-            # In case of missing key, expect ValueError
-            Output.write('Directory is not found in list!', ColorCodes.DANGER)
+            self._dirs['list'] = mod.copy()
+            self.view()
         except KeyError as error:
             # In case of an empty list, expect KeyError
             Output.write('No saved directory has been found!',
-                         ColorCodes.DANGER)
-
-
-class CredentialController:
-    """
-    This class controls and performs all of the credentials related 
-    tasks according to the passed argument followed by creds command.
-    """
-
-    def __init__(self, creds):
-        self.creds = creds
-
-    def add(self):
-        """Appends new credentials in key - value pairs."""
-        try:
-            if len(sys.argv) != 5:
-                raise SyntaxError(
-                    'Invalid syntax! Please pass argument in <key> <value> format.')
-            # Warn if key is already in list
-            if sys.argv[3].lower() in self.creds:
-                raise ValueError('Key already exists!')
-            self.creds[sys.argv[3].lower()] = sys.argv[4]
-            Output.write("Success!", ColorCodes.SUCCESS)
-            # Show current list
-            self.list()
-        except SyntaxError as error:
-            Output.write(error, ColorCodes.DANGER)
-        except ValueError as error:
-            Output.write(error, ColorCodes.DANGER)
-            # TODO: Ask if user wish to replace it
-
-    def list(self):
-        """Show existing list of credentials."""
-        try:
-            Output.write('Listing credentials...', ColorCodes.INFO)
-            if len(self.creds) <= 0:
-                raise KeyError
-            for key in self.creds:
-                Output.write(f"{key} => {self.creds[key]}")
-        except KeyError as error:
-            Output.write('No saved credential has been found!',
-                         ColorCodes.DANGER)
-
-    def clear(self):
-        """Clear specified key(s) or entire list of credentials."""
-        keys = sys.argv[3:len(sys.argv)].copy() if len(
-            sys.argv) > 3 else None
-        if keys is None:
-            # If no key is specified, remove entire list
-            self.creds.clear()
-            Output.write('Credential list cleared!', ColorCodes.SUCCESS)
-            return
-
-        # Else, try to remove specified keys
-        try:
-            # Copy the list into intermediate container
-            for key in keys:
-                Output.write(f"Removing {key}...", ColorCodes.WARNING)
-                del self.creds[key]
-            # Restore directories after trimming
-            Output.write('Success!', ColorCodes.SUCCESS)
-            # Show new list
-            self.list()
-        except ValueError as error:
-            # In case of missing key, expect ValueError
-            Output.write('Credential is not found in list!', ColorCodes.DANGER)
-        except KeyError as error:
-            # In case of an empty list, expect KeyError
-            Output.write('No saved credential has been found!',
                          ColorCodes.DANGER)
 
 
 class CommandController:
     """
-    This class controls the running procedure of the command followed 
-    by run keyword. It can be any shell command, anything!
-
-    CAUTION: Definitely try at your home. If you do something like 
-    "sudo rm -rf /" on your production server, your system may die.
+    Controls everything related to the command.
     """
-
-    def __init__(self, cmd, dirs, creds):
-        self.cmd = cmd
-        self.dirs = dirs
-        self.creds = creds
-
-    def make(self):
-        """Process the ingredients to run."""
+    
+    def run(self, dirs, cmd, li=0, ui=None):
+        """
+        Run the command.
+        :param dirs: The shelve module where the list is saved
+        :param cmd: The command to run
+        :param li: Lower index (optional)
+        :param ui: Upper index (optional)
+        """
         try:
-            if len(sys.argv) != 3:
-                raise SyntaxError(
-                    "Invalid syntax! The correct format is ./lc run '<command>'.")
-
-            directories = self.dirs['list'].copy()
-            # Sort directories alphabetically
-            directories.sort()
-            self.run(directories)
-        except SyntaxError as error:
-            # No time to deal with wrong syntax
-            Output.write(error, ColorCodes.DANGER)
-        except KeyError as error:
+            directories = dirs['list'][li:ui].copy()
+            cwd = Path(os.getcwd())
+            succeed = 0
+            failed = 0
+            for directory in directories:
+                # If a directory is missing, tell the user
+                if not os.path.exists(cwd.parent.joinpath(directory)):
+                    print("\n")
+                    Output.write([
+                        {'text': 'Directory', 'code': ColorCodes.DANGER},
+                        {'text': f"'{directory}'", 'code': ColorCodes.WARNING},
+                        {'text': 'is not found! Skipping...',
+                         'code': ColorCodes.DANGER}
+                    ])
+                    failed += 1
+                    continue
+                # Omit if not a directory
+                if not os.path.isdir(cwd.parent.joinpath(directory)):
+                    print("\n")
+                    Output.write([
+                        {'text': f"'{directory}'", 'code': ColorCodes.WARNING},
+                        {'text': 'is not a directory. Skipping...',
+                         'code': ColorCodes.INFO}
+                    ])
+                    failed += 1
+                    continue
+                self.execute(directory, cmd, cwd)
+                succeed += 1
+        except TypeError:
+            Output.write("Please provide valid integers!", ColorCodes.DANGER)
+        except KeyError:
             # In case of an empty list, expect KeyError
             Output.write('No saved directory has been found!',
                          ColorCodes.DANGER)
-
-    def run(self, directories):
-        """Run the command through out each saved directory in dirs list."""
-        for directory in directories:
-            # If a directory is missing, tell the user
-            if not os.path.exists(f"../{directory}"):
-                print('\n')
-                Output.write([
-                    {'text': 'Directory', 'code': ColorCodes.DANGER},
-                    {'text': f"'{directory}'", 'code': ColorCodes.WARNING},
-                    {'text': 'not found! Skipping...',
-                     'code': ColorCodes.DANGER}
-                ])
-            try:
-                print('\n')
-                Output.write([
-                    {'text': 'Changed directory to',
-                        'code': ColorCodes.INFO},
-                    {'text': f"'{os.path.realpath('../' + directory)}'",
-                        'code': ColorCodes.WARNING},
-                    {'text': "and running", 'code': ColorCodes.INFO},
-                    {'text': f"'{self.cmd}'", 'code': ColorCodes.WARNING}
-                ])
-                # Switch to the desired directory
-                os.chdir(f"../{directory}")
-                # Do the mischief
-                os.system(self.cmd)
-            except OSError as error:
-                # If something goes wrong...
-                Output.write(error, ColorCodes.DANGER)
-            finally:
-                # Return to home like a good animal
-                os.chdir('../lordcommander')
+        finally:
+            Output.write([
+                {'text': f"\nSuccessful run:", 'code': ColorCodes.NORMAL},
+                {'text': succeed, 'code': ColorCodes.SUCCESS},
+                {'text': f"\nFailed run:", 'code': ColorCodes.NORMAL},
+                {'text': failed, 'code': ColorCodes.DANGER}
+            ])
+    
+    def execute(self, directory, cmd, cwd):
+        """
+        Execute the command to the specified directory.
+        :param directory: The directory where the command will run
+        :param cmd: The command to run
+        :param cwd: Location of the lordcommander program
+        """
+        try:
+            print('\n')
+            Output.write([
+                {'text': 'Changed directory to',
+                 'code': ColorCodes.INFO},
+                {'text': f"'{cwd.parent.joinpath(directory)}'",
+                 'code': ColorCodes.WARNING},
+                {'text': "and running", 'code': ColorCodes.INFO},
+                {'text': f"'{cmd}'", 'code': ColorCodes.WARNING}
+            ])
+            # Switch to the desired directory
+            os.chdir(cwd.parent.joinpath(directory))
+            # Do the mischief
+            os.system(cmd)
+        except OSError as error:
+            # If something goes wrong...
+            Output.write(error, ColorCodes.DANGER)
+        finally:
+            # Return to home like a good cat 🐈🐈🐈🐈
+            os.chdir(cwd)
