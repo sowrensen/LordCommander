@@ -19,7 +19,7 @@ Changelog
 - Added feature to throttle the execution. ✈️
 - Added feature to remove multiple directories at once.
 - Added feature to search for a directory in the list and see total number of directories.
-- Now shows number of successful and failed runs at the end. ✅ ❌
+- Now shows number of successful and failed runs at the end. ✔️ ❌
 - `list` command has been changed to `view`. Also `sort` will be used instead of `alpha`. 
 - Now asks for confirmation when clearing entire list.
 - Improved program architecture and code structure.
@@ -185,7 +185,7 @@ Future Improvements
 
 ** These may or may not be implemented.
 
-- ~~Add counter for successful runs and failed runs.~~ ✅
-- ~~Count directories.~~ ✅
+- ~~Add counter for successful runs and failed runs.~~ ✔️
+- ~~Count directories.~~ ✔️
 - One instance of LordCommander for all projects.
 - Use SQLite3 instead of Shelve.
