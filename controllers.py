@@ -155,6 +155,8 @@ class CommandController:
             Output.write('No saved directory has been found!',
                          ColorCodes.DANGER)
         finally:
+            # Return to home like a good cat 🐈
+            os.chdir(cwd)
             Output.write([
                 {'text': f"\nSuccessful run:", 'code': ColorCodes.NORMAL},
                 {'text': succeed, 'code': ColorCodes.SUCCESS},
@@ -186,6 +188,3 @@ class CommandController:
         except OSError as error:
             # If something goes wrong...
             Output.write(error, ColorCodes.DANGER)
-        finally:
-            # Return to home like a good cat 🐈
-            os.chdir(cwd)
