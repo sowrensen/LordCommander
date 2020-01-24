@@ -1,11 +1,23 @@
+"""
+| ---------------------------------------------------------------------
+| output.py
+| ---------------------------------------------------------------------
+| This module provides a fancy way to show output, errors, warnings,
+| or info on CLI.
+|
+| Version: 3.0
+| License: GNU General Public License 3
+"""
+
 from color_codes import ColorCodes
 from colr import color
 
 
 class Output:
     """Handles all output messages and formats them according to specified color code."""
+    
     @staticmethod
-    def write(message, code=ColorCodes.NORMAL) -> None:
+    def write(message, code=ColorCodes.NORMAL):
         """
         Shows message according to color code in terminal. If message has several parts,
         you can pass a list of dictionaries as {text: 'Message', code: 'ffffff'} format.
