@@ -45,7 +45,9 @@ Changelog
 Running
 -----
 
-Run following commands to clone the repository and install dependencies:
+Clone the repository with the same directory level where you want to run 
+recursive commands. Run following commands to clone the repository and 
+install dependencies:
 
 ```
 git clone https://sowrensen@github.com/sowrensen/lordcommander.git

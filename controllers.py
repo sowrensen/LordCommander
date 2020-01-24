@@ -122,11 +122,12 @@ class CommandController:
         try:
             directories = dirs['list'][li:ui].copy()
             cwd = Path(os.getcwd())
+            project_dir = cwd.parent
             succeed = 0
             failed = 0
             for directory in directories:
                 # If a directory is missing, tell the user
-                if not os.path.exists(cwd.parent.joinpath(directory)):
+                if not os.path.exists(project_dir.joinpath(directory)):
                     print("\n")
                     Output.write([
                         {'text': 'Directory', 'code': ColorCodes.DANGER},
@@ -137,7 +138,7 @@ class CommandController:
                     failed += 1
                     continue
                 # Omit if not a directory
-                if not os.path.isdir(cwd.parent.joinpath(directory)):
+                if not os.path.isdir(project_dir.joinpath(directory)):
                     print("\n")
                     Output.write([
                         {'text': f"'{directory}'", 'code': ColorCodes.WARNING},
@@ -146,7 +147,7 @@ class CommandController:
                     ])
                     failed += 1
                     continue
-                self.execute(directory, cmd, cwd)
+                self.execute(directory, cmd, project_dir)
                 succeed += 1
         except TypeError:
             Output.write("Please provide valid integers!", ColorCodes.DANGER)
@@ -164,25 +165,25 @@ class CommandController:
                 {'text': failed, 'code': ColorCodes.DANGER}
             ])
     
-    def execute(self, directory, cmd, cwd):
+    def execute(self, directory, cmd, project_dir):
         """
         Execute the command to the specified directory.
         :param directory: The directory where the command will run
         :param cmd: The command to run
-        :param cwd: Location of the lordcommander program
+        :param project_dir: Location of the lordcommander program
         """
         try:
             print('\n')
             Output.write([
                 {'text': 'Changed directory to',
                  'code': ColorCodes.INFO},
-                {'text': f"'{cwd.parent.joinpath(directory)}'",
+                {'text': f"'{project_dir.joinpath(directory)}'",
                  'code': ColorCodes.WARNING},
                 {'text': "and running", 'code': ColorCodes.INFO},
                 {'text': f"'{cmd}'", 'code': ColorCodes.WARNING}
             ])
             # Switch to the desired directory
-            os.chdir(cwd.parent.joinpath(directory))
+            os.chdir(project_dir.joinpath(directory))
             # Do the mischief
             os.system(cmd)
         except OSError as error:
