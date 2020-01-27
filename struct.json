@@ -1,0 +1,25 @@
+{
+  "active": "project-a",
+  "projects": {
+    "project-a": {
+      "root": "/home/sowrensen/test/PojectA",
+      "instances": [
+        "instance-1",
+        "instance-2",
+        "instance-3",
+        "instance-4",
+        "instance-5"
+      ]
+    },
+    "project-b": {
+      "root": "/home/sowrensen/test/PojectB",
+      "instances": [
+        "instance-1",
+        "instance-2",
+        "instance-3",
+        "instance-4",
+        "instance-5"
+      ]
+    }
+  }
+}

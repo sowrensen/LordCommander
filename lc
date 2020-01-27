@@ -15,7 +15,8 @@ import shelve
 from fire import Fire
 from utils import Utils
 from output import Output
-from controllers import DirectoryController, CommandController
+from color_codes import ColorCodes
+from controllers import DirectoryController, CommandController, ProjectController
 
 
 class LordCommander:
@@ -25,14 +26,27 @@ class LordCommander:
     
     def __init__(self):
         try:
+            self._lcdb = self._read_data()
+            self.dirs = DirectoryController(self._lcdb)
+            self.utils = Utils(self._lcdb)
+            self.proj = ProjectController(self._lcdb)
+        except IOError as error:
+            Output.write(error)
+            
+    def _read_data(self):
+        try:
             # Read files or create them if doesn't exist
             if not os.path.exists('.files'):
                 os.mkdir('.files')
-            self._dirs_shelve = shelve.open('.files/dirs')
-            self.dirs = DirectoryController(self._dirs_shelve)
-            self.utils = Utils(self._dirs_shelve)
-        except IOError as error:
-            Output.write(error)
+            lcdb = shelve.open('.files/lcdb', writeback=True)
+            if 'active' not in lcdb or lcdb['active'] == '':
+                lcdb['active'] = ""
+                Output.write("No active project is set! Select an active project please.", ColorCodes.WARNING)
+                proj = ProjectController(lcdb)
+                proj.active()
+            return lcdb
+        except:
+            Output.write("\nAborted, no action has been taken.")
     
     def run(self, command, li=0, ui=None):
         """
@@ -42,7 +56,7 @@ class LordCommander:
         :param ui: Upper index (optional)
         """
         cc = CommandController()
-        cc.run(self._dirs_shelve, command, li, ui)
+        cc.run(self._lcdb, command, li, ui)
 
 
 if __name__ == "__main__":

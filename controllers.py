@@ -189,3 +189,96 @@ class CommandController:
         except OSError as error:
             # If something goes wrong...
             Output.write(error, ColorCodes.DANGER)
+
+
+class ProjectController:
+    """
+    Does everything related to projects.
+    """
+    
+    def __init__(self, lcdb):
+        self._lcdb = lcdb
+    
+    def active(self):
+        """
+        Set active project.
+        """
+        # try:
+        if 'projects' not in self._lcdb.keys() or len(self._lcdb['projects']) <= 0:
+            self._lcdb['projects'] = {}
+            Output.write("No project has been added yet, please add a project first.", ColorCodes.WARNING)
+            self.add()
+        Output.write("Which project do you want to set as active? Type the name.")
+        self.view()
+        while True:
+            choice = input('>> ')
+            if choice in list(self._lcdb['projects'].keys()):
+                self._lcdb['active'] = choice
+                Output.write("%s is set as active project." % choice, ColorCodes.SUCCESS)
+                break
+            Output.write("Invalid choice, please choose a valid name from the list.", ColorCodes.DANGER)
+        # except:
+        #     Output.write("\nAborted. Nothing is changed.")
+    
+    def add(self):
+        """
+        Add new project.
+        """
+        # try:
+        while True:
+            Output.write("What is the project path?")
+            root = input(">> ")
+            if not os.path.isabs(root):
+                Output.write("Invalid path, it should be absolute.", ColorCodes.DANGER)
+                continue
+            if os.path.exists(root):
+                path = Path(root)
+                data = {
+                    'root': path,
+                    'instances': []
+                }
+                if path.stem in self._lcdb['projects'].keys():
+                    Output.write("Project already exists!", ColorCodes.DANGER)
+                    continue
+                self._lcdb['projects'][path.stem] = data
+                Output.write("%s is added to project list." % path.stem, ColorCodes.SUCCESS)
+                break
+            Output.write("Invalid path, please enter a valid path.", ColorCodes.DANGER)
+        # except:
+        #     Output.write("\nAborted. Nothing is changed.")
+    
+    def view(self):
+        """
+        View list of added projects.
+        """
+        try:
+            Output.write('Listing projects...', ColorCodes.INFO)
+            projects = list(self._lcdb['projects'].keys())
+            for project in projects:
+                Output.write("- %s%s" % (project, '*' if project == self._lcdb['active'] else ''))
+            Output.write("\nTotal %d projects listed." % len(projects))
+        except KeyError as error:
+            Output.write('No saved projects has been found!',
+                         ColorCodes.DANGER)
+            
+    def clear(self):
+        # try:
+        Output.write("Which project do you want to remove?")
+        Output.write("Caution! This cannot be undone. Press CTRL-C to exit.", ColorCodes.DANGER)
+        self.view()
+        while True:
+            choice = input(">> ")
+            if choice in self._lcdb['projects'].keys():
+                if choice == self._lcdb['active']:
+                    Output.write("The project is set as active currently, are you sure? (yes/no)[no]:")
+                    options = {'yes', 'y'}
+                    decision = input(">> ")
+                    if decision not in options:
+                        raise Exception()
+                    self._lcdb['active'] = ''
+                del self._lcdb['projects'][choice]
+                Output.write("%s is removed from LordCommander." % choice, ColorCodes.SUCCESS)
+                break
+            Output.write("Invalid choice, please choose a valid name from the list.", ColorCodes.DANGER)
+        # except:
+        #     Output.write("\nAborted. Nothing is changed.")
