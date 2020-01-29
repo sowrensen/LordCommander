@@ -131,6 +131,8 @@ along with it's added instances. If a project is set as active during removal, t
 `active` key will set to null and you have to set an active project for further
 operations.
 
+-----
+
 ### Directory Handling
 
 #### See directory list
@@ -279,4 +281,4 @@ Future Improvements
 - ~~Add counter for successful runs and failed runs.~~ ✔️
 - ~~Count directories.~~ ✔️
 - ~~One instance of LordCommander for all projects.~~ ✔️
-- ~~Use SQLite3 instead of Shelve.~~ ❎
+- ~~Use SQLite3 instead of Shelve.~~ ❌
