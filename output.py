@@ -5,12 +5,12 @@
 | This module provides a fancy way to show output, errors, warnings,
 | or info on CLI.
 |
-| Version: 3.0
+| Version: 4.0
 | License: GNU General Public License 3
 """
 
-from color_codes import ColorCodes
 from colr import color
+from color_codes import ColorCodes
 
 
 class Output:

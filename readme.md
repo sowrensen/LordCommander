@@ -1,6 +1,6 @@
 # LordCommander
 
-LordCommander is a command line program to run a shell command recursively through predefined
+LordCommander is a command line program to run shell commands recursively through predefined
 directories.
 
 Requirements
@@ -12,6 +12,13 @@ Requirements
 
 Changelog
 -----
+
+#### Version 4.x
+- Now one instance of LordCommander can handle multiple projects. 🤹 (v4.0)
+- Added new project module to handle project related tasks. (v4.0)
+- Added feature to dump data to JSON file and restore from previous dumped files. 🗄 (v4.0)
+- Added custom exception module. (v4.0)
+- Bug fixes and performance improvements. (v4.0)
 
 #### Version 3.x
 
@@ -42,11 +49,10 @@ Changelog
 
 - Initial release.
 
-Running
+Initialization
 -----
 
-Clone the repository with the same directory level where you want to run 
-recursive commands. Run following commands to clone the repository and 
+Run following commands to clone the repository and 
 install dependencies:
 
 ```
@@ -54,13 +60,76 @@ git clone https://sowrensen@github.com/sowrensen/lordcommander.git
 cd lordcommander
 pipenv install
 chmod +x lc
+pipenv shell
 ./lc <command> <args> <flags>
 ```
 
 Usage
 -----
 
+### How to run commands using LordCommander?
+
+1. Add some projects to LordCommander.
+2. Set a project as active.
+3. Add some instances of that project.
+4. Run a command.
+
 You can append `--help` after each command always to see the manual.
+
+### Project Handling
+
+#### See project list
+
+To see added projects to LordCommander, run:
+
+```
+./lc proj view
+```
+
+The active project will be * marked.
+
+#### Add new project
+
+To add a new project, you have to specify the path of the project directory. *Remember, 
+this is not the location of individual project, i.e. directories where the command
+will run are inside this location.* Run:
+
+```
+./lc proj add /home/sowrensen/test/project-a
+```
+
+This will create the following data structure in the shelve module:
+
+```
+'project-a': {
+    'root': '/home/sowrensen/test/project-a',
+    'instances': []
+}
+```
+
+Later in the `instances` list, you will add your project instances using `dirs add` command.
+
+#### Set or change active project
+
+To set or change active project, you must have at least one project. After adding
+projects, run:
+
+```
+./lc proj active project-a
+```
+
+#### Remove a project
+
+To remote a project from LordCommander, run:
+
+```
+./lc proj clear project-a
+```
+
+The program will ask for your confirmation, if you allow it will remove entire project
+along with it's added instances. If a project is set as active during removal, the
+`active` key will set to null and you have to set an active project for further
+operations.
 
 ### Directory Handling
 
@@ -182,6 +251,26 @@ If you're wondering how many saved directories do you have, just tell LordComman
 ./lc utils total
 ```
 
+#### Dumping and restoring data using JSON file
+
+With version 4.0, you can dump and restore data of LordCommander. To dump existing data in the 
+shelve module, run:
+
+```
+./lc utils dump /home/sowrensen
+```
+
+The third argument is the location where you want to save the file. There you will find a file named
+`lcdb_dump.json`. You can use that file later to restore data into shelve module. To restore from a 
+JSON file, run following command with the file path as third argument.
+
+>**Note:** Restoring data will replace existing data. It is a good idea to dump
+before you restore.
+
+```
+./lc utils restore /home/sowrensen/lcdb_dump.json
+```
+
 Future Improvements
 -----
 
@@ -189,5 +278,5 @@ Future Improvements
 
 - ~~Add counter for successful runs and failed runs.~~ ✔️
 - ~~Count directories.~~ ✔️
-- One instance of LordCommander for all projects.
-- Use SQLite3 instead of Shelve.
+- ~~One instance of LordCommander for all projects.~~ ✔️
+- ~~Use SQLite3 instead of Shelve.~~ ❎
