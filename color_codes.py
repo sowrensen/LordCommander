@@ -6,7 +6,7 @@
 | the entire application. Only a single class with some hardcoded
 | color codes are the ingredients here.
 |
-| Version: 4.0
+| Version: 4.x
 | License: GNU General Public License 3
 """
 

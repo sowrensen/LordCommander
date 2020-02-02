@@ -5,7 +5,7 @@
 | This utils module holds some of the necessary functions that may
 | require over time to time.
 |
-| Version: 4.0
+| Version: 4.x
 | License: GNU General Public License 3
 """
 import os
@@ -91,7 +91,7 @@ class Utils:
             Output.write("This will remove existing data completely. Are you sure? (yes/no)[no]:")
             yes = {'yes', 'y'}
             if input(">> ") not in yes:
-                raise Exception()
+                raise KeyboardInterrupt("Aborted! Nothing is changed.")
             
             # Clear existing and restore imported data
             self._lcdb.clear()
@@ -105,6 +105,5 @@ class Utils:
             Output.write(error, ColorCodes.DANGER)
         except ValueError as error:
             Output.write(error, ColorCodes.DANGER)
-        except:
-            # In case of keyboard interruption
-            Output.write("\nAborted. Nothing is changed.")
+        except KeyboardInterrupt as error:
+            Output.write(error, ColorCodes.DANGER)
