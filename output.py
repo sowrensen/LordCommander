@@ -5,7 +5,7 @@
 | This module provides a fancy way to show output, errors, warnings,
 | or info on CLI.
 |
-| Version: 4.0
+| Version: 4.x
 | License: GNU General Public License 3
 """
 

@@ -1,11 +1,11 @@
 """
 | ---------------------------------------------------------------------
-| lc.py
+| lordcommander.py
 | ---------------------------------------------------------------------
 | LordCommander (hence, lc) is a python program to run a shell
 | command recursively through predefined directories.
 |
-| Version: 4.0
+| Version: 4.x
 | License: GNU General Public License 3
 """
 

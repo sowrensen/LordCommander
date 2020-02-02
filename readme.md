@@ -19,6 +19,7 @@ Changelog
 - Added feature to dump data to JSON file and restore from previous dumped files. 🗄 (v4.0)
 - Added custom exception module. (v4.0)
 - Bug fixes and performance improvements. (v4.0)
+- Minor fixes. (v4.0.1)
 
 #### Version 3.x
 

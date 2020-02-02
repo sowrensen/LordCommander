@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
+"""
+| ---------------------------------------------------------------------
+| lc.py
+| ---------------------------------------------------------------------
+| The event horizon of the program.
+|
+| Version: 4.x
+| License: GNU General Public License 3
+"""
 
 from fire import Fire
 from lordcommander import LordCommander
 
 if __name__ == "__main__":
-    # The event horizon
     Fire(LordCommander)
