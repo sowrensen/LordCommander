@@ -231,7 +231,7 @@ run it from 50 and it will start right there and won't stop until it reaches the
 
 ### Utilities 
 
-From version 3.0, a utility class has been added to run some handy tasks. Right now there are two 
+From version 3.0, a utility class has been added to run some handy tasks. Right now there are four 
 commands, more will be introduced over time.
 
 #### Searching for a directory
@@ -283,3 +283,5 @@ Future Improvements
 - ~~Count directories.~~ ✔️
 - ~~One instance of LordCommander for all projects.~~ ✔️
 - ~~Use SQLite3 instead of Shelve.~~ ❌
+- Show index in search result. e.g. (`./lc utils search demo //Found! (Index: 3)`)
+- Specify indices to exclude during a command execution. e.g. (`./lc run pwd --ex=3,5`)
