@@ -146,7 +146,7 @@ class CommandController:
             failed = 0
             # First, apply li and ui to slice instances/directories,
             # then filter out by excluding according to ex
-            instances = [proj for proj in project['instances'][li:ui] if project['instances'].index(proj) not in ex]
+            instances = [ins for ins in project['instances'][li:ui] if project['instances'].index(ins) not in ex]
             instance_root = Path(project['root'])
             
             if len(instances) <= 0:
