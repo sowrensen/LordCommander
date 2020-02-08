@@ -296,5 +296,5 @@ Future Improvements
 - ~~Count directories.~~ ✔️
 - ~~One instance of LordCommander for all projects.~~ ✔️
 - ~~Use SQLite3 instead of Shelve.~~ ❌
-- Show index in search result. e.g. (`./lc utils search demo //Found! (Index: 3)`)
-- Specify indices to exclude during a command execution. e.g. (`./lc run pwd --ex=3,5`)
+- ~~Show index in search result. e.g. (`./lc utils search demo //Found! (Index: 3)`)~~ ✔️
+- ~~Specify indices to exclude during a command execution. e.g. (`./lc run pwd --ex=3,5`)~~ ✔️
