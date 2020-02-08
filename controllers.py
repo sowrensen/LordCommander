@@ -44,7 +44,7 @@ class DirectoryController:
                     "May be no active project has been set. Please check.")
             
             # Process passed arguments
-            directories = list((filter(lambda dir: type(dir) is str, args)))
+            directories = list((filter(lambda dir: isinstance(dir, str), args)))
             
             # Append new directories to the list, no redundant value will exist
             self._instances.extend([ins for ins in directories if ins not in self._instances])
@@ -132,18 +132,21 @@ class CommandController:
     Stirs the command executor.
     """
     
-    def run(self, project, cmd, li=0, ui=None):
+    def run(self, project, cmd, li=0, ui=None, ex=()):
         """
         Run the command.
         :param project: The active project dictionary
         :param cmd: The command to run
         :param li: Lower index (optional)
         :param ui: Upper index (optional)
+        :param ex: Tuple of indices to exclude during execution (optional)
         """
         try:
             succeeded = 0
             failed = 0
-            instances = project['instances'][li:ui].copy()
+            # First, apply li and ui to slice instances/directories,
+            # then filter out by excluding according to ex
+            instances = [proj for proj in project['instances'][li:ui] if project['instances'].index(proj) not in ex]
             instance_root = Path(project['root'])
             
             if len(instances) <= 0:

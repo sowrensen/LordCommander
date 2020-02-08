@@ -60,18 +60,21 @@ class LordCommander:
         """
         return self._lcdb['projects'][self._lcdb['active']] if self._lcdb['active'] != '' else {}
     
-    def run(self, command, li=0, ui=None):
+    def run(self, command, li=0, ui=None, ex=()):
         """
         Run a command.
         :param command: The command to run
         :param li: Lower index (optional)
         :param ui: Upper index (optional)
+        :param ex: Tuple of indices to exclude during execution (optional)
         """
         try:
             if not self._active:
                 raise ActiveProjectNotSetException(
                     "May be no active project has been set. Please check.")
+            # Convert ex to tuple if only a single digit is inputted
+            ex = ex if isinstance(ex, tuple) else tuple([ex])
             cc = CommandController()
-            cc.run(self._active, command, li, ui)
+            cc.run(self._active, command, li, ui, ex)
         except ActiveProjectNotSetException as error:
             Output.write(error, ColorCodes.DANGER)

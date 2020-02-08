@@ -20,6 +20,9 @@ Changelog
 - Added custom exception module. (v4.0)
 - Bug fixes and performance improvements. (v4.0)
 - Minor fixes. (v4.0.1)
+- Searching for a directory/instance now also shows the index. (v4.1.0)
+- Specific directory/instance now can be excluded during execution. See
+[Running Commands](#exclude-directoryinstance-from-execution) section. (v4.1.0) 
 
 #### Version 3.x
 
@@ -226,6 +229,16 @@ or,
 
 Yes, you don't have to remember or know how any items are in your list. Just tell the program to 
 run it from 50 and it will start right there and won't stop until it reaches the end of the list. 
+
+#### Exclude directory/instance from execution
+
+To exclude one or more particular directories/instances from execution, you can specify indices with `--ex` flag. e.g.:
+
+```
+./lc run <command> --ex=3,8
+```
+
+Thus, directories in index 3 and 8 will be excluded from the list during execution.
 
 -----
 
