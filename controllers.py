@@ -276,7 +276,7 @@ class ProjectController:
     
     def view(self):
         """
-        View list of added projects. Active project will be star marked.
+        View list of added projects. Active project will be colored in green.
         """
         try:
             projects = list(self._lcdb['projects'].keys())
