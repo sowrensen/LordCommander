@@ -16,6 +16,7 @@
 
 import os
 from lcex import *
+from colr import color
 from pathlib import Path
 from output import Output
 from color_codes import ColorCodes
@@ -286,8 +287,10 @@ class ProjectController:
             
             Output.write('Listing projects...', ColorCodes.INFO)
             for project in projects:
-                Output.write("- %s%s" %
-                             (project, '*' if project == self._lcdb['active'] else ''))
+                root = self._lcdb['projects'][project]['root']
+                Output.write("- %s: %s" %
+                             (color(project, ColorCodes.SUCCESS) if project == self._lcdb['active'] else project,
+                              color(root, ColorCodes.MUTED)))
             Output.write("\nTotal %d projects listed." % len(projects))
         
         except ProjectNotFoundException as error:
