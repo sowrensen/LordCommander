@@ -16,6 +16,7 @@
 
 import os
 from lcex import *
+from colr import color
 from pathlib import Path
 from output import Output
 from color_codes import ColorCodes
@@ -44,7 +45,7 @@ class DirectoryController:
                     "May be no active project has been set. Please check.")
             
             # Process passed arguments
-            directories = list((filter(lambda dir: type(dir) is str, args)))
+            directories = list((filter(lambda dir: isinstance(dir, str), args)))
             
             # Append new directories to the list, no redundant value will exist
             self._instances.extend([ins for ins in directories if ins not in self._instances])
@@ -132,18 +133,21 @@ class CommandController:
     Stirs the command executor.
     """
     
-    def run(self, project, cmd, li=0, ui=None):
+    def run(self, project, cmd, li=0, ui=None, ex=()):
         """
         Run the command.
         :param project: The active project dictionary
         :param cmd: The command to run
         :param li: Lower index (optional)
         :param ui: Upper index (optional)
+        :param ex: Tuple of indices to exclude during execution (optional)
         """
         try:
             succeeded = 0
             failed = 0
-            instances = project['instances'][li:ui].copy()
+            # First, apply li and ui to slice instances/directories,
+            # then filter out by excluding according to ex
+            instances = [ins for ins in project['instances'][li:ui] if project['instances'].index(ins) not in ex]
             instance_root = Path(project['root'])
             
             if len(instances) <= 0:
@@ -272,7 +276,7 @@ class ProjectController:
     
     def view(self):
         """
-        View list of added projects. Active project will be star marked.
+        View list of added projects. Active project will be colored in green.
         """
         try:
             projects = list(self._lcdb['projects'].keys())
@@ -283,8 +287,10 @@ class ProjectController:
             
             Output.write('Listing projects...', ColorCodes.INFO)
             for project in projects:
-                Output.write("- %s%s" %
-                             (project, '*' if project == self._lcdb['active'] else ''))
+                root = self._lcdb['projects'][project]['root']
+                Output.write("- %s: %s" %
+                             (color(project, ColorCodes.SUCCESS) if project == self._lcdb['active'] else project,
+                              color(root, ColorCodes.MUTED)))
             Output.write("\nTotal %d projects listed." % len(projects))
         
         except ProjectNotFoundException as error:

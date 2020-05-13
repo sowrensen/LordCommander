@@ -35,9 +35,13 @@ class Utils:
             if not self._project:
                 raise ActiveProjectNotSetException(
                     "May be no active project has been set. Please check.")
-            return Output.write('Found!', ColorCodes.SUCCESS) if key in self._project['instances'] else Output.write(
-                'Not found!',
-                ColorCodes.DANGER)
+            if key in self._project['instances']:
+                Output.write('Found! Index: {}'.format(
+                    self._project['instances'].index(key)), ColorCodes.SUCCESS)
+            else:
+                Output.write(
+                    'Not found!',
+                    ColorCodes.DANGER)
         except ActiveProjectNotSetException as error:
             Output.write(error, ColorCodes.DANGER)
     
@@ -61,12 +65,14 @@ class Utils:
         """
         try:
             if not os.path.exists(strpath) or not os.path.isdir(strpath):
-                raise FileNotFoundError("Invalid path, please provide a valid path.")
+                raise FileNotFoundError(
+                    "Invalid path, please provide a valid path.")
             path = Path(strpath)
             filename = path.joinpath('lcdb_dump.json')
             with open(filename, 'w') as output:
                 json.dump(dict(self._lcdb), output, indent=4)
-            Output.write("Data dumping successful. Output file: %s" % filename, ColorCodes.SUCCESS)
+            Output.write("Data dumping successful. Output file: %s" %
+                         filename, ColorCodes.SUCCESS)
         except FileNotFoundError as error:
             Output.write(error, ColorCodes.DANGER)
     
@@ -77,7 +83,8 @@ class Utils:
         """
         try:
             if not os.path.exists(strpath) or not os.path.isfile(strpath):
-                raise FileNotFoundError("Invalid path, please provide a valid path.")
+                raise FileNotFoundError(
+                    "Invalid path, please provide a valid path.")
             
             # Load JSON file
             with open(strpath) as backup_file:
@@ -85,10 +92,12 @@ class Utils:
             
             # Check content of the file and report if invalid
             if not all(key in data for key in ['active', 'projects']) or len(data.keys()) > 2:
-                raise ValueError("Failed! Not a valid LordCommander supported file.")
+                raise ValueError(
+                    "Failed! Not a valid LordCommander supported file.")
             
             # Ask for confirmation to restore
-            Output.write("This will remove existing data completely. Are you sure? (yes/no)[no]:")
+            Output.write(
+                "This will remove existing data completely. Are you sure? (yes/no)[no]:")
             yes = {'yes', 'y'}
             if input(">> ") not in yes:
                 raise KeyboardInterrupt("Aborted! Nothing is changed.")
@@ -97,7 +106,8 @@ class Utils:
             self._lcdb.clear()
             for key, value in data.items():
                 self._lcdb[key] = value
-            Output.write("Data has been imported successfully.", ColorCodes.SUCCESS)
+            Output.write("Data has been imported successfully.",
+                         ColorCodes.SUCCESS)
         
         except FileNotFoundError as error:
             Output.write(error, ColorCodes.DANGER)
