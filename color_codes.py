@@ -21,4 +21,4 @@ class ColorCodes:
     INFO = '25a7fd'
     WARNING = 'f7f73e'
     DANGER = 'f74759'
-    MUTED= '6a6a6a'
+    MUTED = '6a6a6a'
