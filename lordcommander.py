@@ -22,7 +22,7 @@ class LordCommander:
     """
     🐈 Run shell commands recursively throughout the predefined directories.
     """
-    
+
     def __init__(self):
         try:
             self._lcdb = self._read_data()
@@ -78,3 +78,7 @@ class LordCommander:
             cc.run(self._active, command, li, ui, ex)
         except ActiveProjectNotSetException as error:
             Output.write(error, ColorCodes.DANGER)
+
+    def version(self):
+        """ Version of the application. """
+        return "4.1.1"
