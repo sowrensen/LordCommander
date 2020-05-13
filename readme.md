@@ -258,3 +258,4 @@ Future Improvements
 - ~~Use SQLite3 instead of Shelve.~~ ❌
 - ~~Show index in search result. e.g. (`./lc utils search demo //Found! (Index: 3)`)~~ ✔️
 - ~~Specify indices to exclude during a command execution. e.g. (`./lc run pwd --ex=3,5`)~~ ✔️
+- Fixing foreground colors for light color schemes.
