@@ -81,4 +81,4 @@ class LordCommander:
 
     def version(self):
         """ Version of the application. """
-        return "4.1.1"
+        return "4.1.2"
