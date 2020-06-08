@@ -50,7 +50,7 @@ To see added projects to LordCommander, run:
 ./lc proj view
 ```
 
-The active project will be colored in green.
+The active project will be check marked.
 
 #### Add new project
 
