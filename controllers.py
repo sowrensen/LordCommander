@@ -15,22 +15,22 @@
 """
 
 import os
+import time
 from lcex import *
 from colr import color
 from pathlib import Path
 from output import Output
-from color_codes import ColorCodes
 
 
 class DirectoryController:
     """
     Add, view, or delete directories/instances.
     """
-    
+
     def __init__(self, instances):
         # instances is a list of module where all directory names are listed.
         self._instances = instances
-    
+
     def add(self, *args):
         """
         Add directories/instances to the existing list or create a new list.
@@ -43,21 +43,23 @@ class DirectoryController:
             if self._instances is None:
                 raise ActiveProjectNotSetException(
                     "May be no active project has been set. Please check.")
-            
+
             # Process passed arguments
-            directories = list((filter(lambda dir: isinstance(dir, str), args)))
-            
+            directories = list(
+                (filter(lambda dir: isinstance(dir, str), args)))
+
             # Append new directories to the list, no redundant value will exist
-            self._instances.extend([ins for ins in directories if ins not in self._instances])
-        
+            self._instances.extend(
+                [ins for ins in directories if ins not in self._instances])
+
         except ArgumentNotProvidedException as error:
-            Output.write(error, ColorCodes.DANGER)
+            Output.danger(error)
         except ActiveProjectNotSetException as error:
-            Output.write(error, ColorCodes.DANGER)
+            Output.danger(error)
         else:
-            Output.write('Success!', ColorCodes.SUCCESS)
+            Output.success('Success!')
             self.view()
-    
+
     def view(self, sort=False):
         """
         View list of added directories/instances in current active project.
@@ -67,16 +69,16 @@ class DirectoryController:
             if self._instances is None:
                 raise ActiveProjectNotSetException(
                     "May be no active project has been set. Please check.")
-            
-            Output.write('Listing directories...', ColorCodes.INFO)
+
+            Output.info('Listing directories...')
             directories = self._instances.copy()
-            Output.write("{}\n".format(
+            Output.normal("{}\n".format(
                 '\n'.join(
                     ('- ' + ins for ins in sorted(directories)) if sort else ('- ' + ins for ins in directories))))
-            Output.write("Total %d directories listed." % len(directories))
+            Output.normal("Total %d directories listed." % len(directories))
         except ActiveProjectNotSetException as error:
-            Output.write(error, ColorCodes.DANGER)
-    
+            Output.danger(error)
+
     def clear(self, *args, full=False):
         """
         Clears entire list or specified directories/instances from the active project instance list.
@@ -87,52 +89,52 @@ class DirectoryController:
             if len(args) <= 0 and not full:
                 raise ArgumentNotProvidedException(
                     "Aborting! No argument has been provided.")
-            
+
             if self._instances is None:
                 raise ActiveProjectNotSetException(
                     "May be no active project has been set. Please check.")
-            
+
             # If flag full is true, remove entire list
             if full:
                 # Ask for confirmation
-                Output.write(
-                    "This will clear the entire list, are you sure? (yes/no) [no]:", ColorCodes.WARNING)
+                Output.warning(
+                    "This will clear the entire list, are you sure? (yes/no) [no]:")
                 yes = {'yes', 'y'}
                 decision = input(">> ")
                 if decision not in yes:
                     raise KeyboardInterrupt("Aborted! Nothing is changed.")
                 else:
                     self._instances.clear()
-                    Output.write('Directory list cleared!', ColorCodes.SUCCESS)
+                    Output.success('Directory list cleared!')
                     return
-            
+
             # Else remove specified keys only
             keys = set(filter(lambda dir: type(dir) is str, args))
             for key in keys:
                 # Skip if a specified key is not in the list
                 if key not in self._instances:
-                    Output.write(f"{key} is not found in the list! Skipping...",
-                                 ColorCodes.DANGER)
+                    Output.danger(
+                        f"{key} is not found in the list! Skipping...")
                     continue
-                
-                Output.write(f"Removing {key}...", ColorCodes.WARNING)
+
+                Output.warning(f"Removing {key}...")
                 self._instances.remove(key)
-                Output.write('Success!', ColorCodes.SUCCESS)
+                Output.success('Success!')
             self.view()
-        
+
         except ArgumentNotProvidedException as error:
-            Output.write(error, ColorCodes.DANGER)
+            Output.danger(error)
         except ActiveProjectNotSetException as error:
-            Output.write(error, ColorCodes.DANGER)
+            Output.danger(error)
         except KeyboardInterrupt as error:
-            Output.write(error, ColorCodes.DANGER)
+            Output.danger(error)
 
 
 class CommandController:
     """
     Stirs the command executor.
     """
-    
+
     def run(self, project, cmd, li=0, ui=None, ex=()):
         """
         Run the command.
@@ -147,50 +149,51 @@ class CommandController:
             failed = 0
             # First, apply li and ui to slice instances/directories,
             # then filter out by excluding according to ex
-            instances = [ins for ins in project['instances'][li:ui] if project['instances'].index(ins) not in ex]
+            instances = [ins for ins in project['instances']
+                         [li:ui] if project['instances'].index(ins) not in ex]
             instance_root = Path(project['root'])
-            
+
             if len(instances) <= 0:
-                Output.write("No instances has been found in the list.", ColorCodes.DANGER)
-            
+                Output.danger("No instances has been found in the list.")
+
             for instance in instances:
                 # If a directory is missing, tell the user
                 if not os.path.exists(instance_root.joinpath(instance)):
                     print("\n")
                     Output.write([
-                        {'text': 'Directory', 'code': ColorCodes.DANGER},
-                        {'text': f"'{instance}'", 'code': ColorCodes.WARNING},
+                        {'text': 'Directory', 'code': Output.DANGER},
+                        {'text': f"'{instance}'", 'code': Output.WARNING},
                         {'text': 'is not found! Skipping...',
-                         'code': ColorCodes.DANGER}
+                         'code': Output.DANGER}
                     ])
                     failed += 1
                     continue
-                
+
                 # Omit if not a directory
                 if not os.path.isdir(instance_root.joinpath(instance)):
                     print("\n")
                     Output.write([
-                        {'text': f"'{instance}'", 'code': ColorCodes.WARNING},
+                        {'text': f"'{instance}'", 'code': Output.WARNING},
                         {'text': 'is not a instance. Skipping...',
-                         'code': ColorCodes.INFO}
+                         'code': Output.INFO}
                     ])
                     failed += 1
                     continue
-                
+
                 self.execute(cmd, instance_root.joinpath(instance))
                 succeeded += 1
-        
+
         except TypeError:
-            Output.write("Please provide valid integers!", ColorCodes.DANGER)
+            Output.danger("Please provide valid integers!")
         finally:
             # Show the statistics
             Output.write([
-                {'text': f"\nSuccessful run:", 'code': ColorCodes.NORMAL},
-                {'text': succeeded, 'code': ColorCodes.SUCCESS},
-                {'text': f"\nFailed run:", 'code': ColorCodes.NORMAL},
-                {'text': failed, 'code': ColorCodes.DANGER}
+                {'text': f"\nSuccessful run:", 'code': ''},
+                {'text': succeeded, 'code': Output.SUCCESS},
+                {'text': f"\nFailed run:", 'code': ''},
+                {'text': failed, 'code': Output.DANGER}
             ])
-    
+
     def execute(self, cmd, instance_path):
         """
         Execute the command to the specified directory.
@@ -201,11 +204,11 @@ class CommandController:
             print('\n')
             Output.write([
                 {'text': 'Changed directory to',
-                 'code': ColorCodes.INFO},
+                 'code': Output.INFO},
                 {'text': f"'{instance_path}'",
-                 'code': ColorCodes.WARNING},
-                {'text': "and running", 'code': ColorCodes.INFO},
-                {'text': f"'{cmd}'", 'code': ColorCodes.WARNING}
+                 'code': Output.WARNING},
+                {'text': "and running", 'code': Output.INFO},
+                {'text': f"'{cmd}'", 'code': Output.WARNING}
             ])
             # Switch to the desired directory
             os.chdir(instance_path)
@@ -213,17 +216,17 @@ class CommandController:
             os.system(cmd)
         except OSError as error:
             # If something goes wrong...
-            Output.write(error, ColorCodes.DANGER)
+            Output.danger(error)
 
 
 class ProjectController:
     """
     Add, view, or delete projects and set active project.
     """
-    
+
     def __init__(self, lcdb):
         self._lcdb = lcdb
-    
+
     def active(self, project):
         """
         Set active project.
@@ -233,13 +236,12 @@ class ProjectController:
             if project not in self._lcdb['projects'].keys() or len(self._lcdb['projects']) <= 0:
                 raise ProjectNotFoundException(
                     "Project %s is not found in the list, to see available projects run 'proj view'." % project)
-            
+
             self._lcdb['active'] = project
-            Output.write("%s is set as active project." %
-                         project, ColorCodes.SUCCESS)
+            Output.success("%s is set as active project." % project)
         except ProjectNotFoundException as error:
-            Output.write(error, ColorCodes.DANGER)
-    
+            Output.danger(error)
+
     def add(self, strpath):
         """
         Add new project.
@@ -249,53 +251,51 @@ class ProjectController:
             if not os.path.isabs(strpath):
                 raise NotAnAbsolutePathException(
                     "Invalid path, it should be absolute.")
-            
+
             if not os.path.exists(strpath):
                 raise FileNotFoundError(
                     "Provided path does not exist, please enter a valid path.")
-            
+
             path = Path(strpath)
             # Exit if already exists
             if path.stem in self._lcdb['projects'].keys():
-                Output.write("Project already exists!", ColorCodes.DANGER)
+                Output.danger("Project already exists!")
                 return
-            
+
             # Add project with default structure
             data = {
                 'root': str(path),
                 'instances': []
             }
             self._lcdb['projects'][path.stem] = data
-            Output.write("%s is added to project list." %
-                         path.stem, ColorCodes.SUCCESS)
-        
+            Output.success("%s is added to project list." % path.stem)
+
         except NotAnAbsolutePathException as error:
-            Output.write(error, ColorCodes.DANGER)
+            Output.danger(error)
         except FileNotFoundError as error:
-            Output.write(error, ColorCodes.DANGER)
-    
+            Output.danger(error)
+
     def view(self):
         """
-        View list of added projects. Active project will be colored in green.
+        View list of added projects. Active project will be checked.
         """
         try:
             projects = list(self._lcdb['projects'].keys())
-            
+
             if len(projects) <= 0:
                 raise ProjectNotFoundException(
                     "No project has been found in the list.")
-            
-            Output.write('Listing projects...', ColorCodes.INFO)
+
+            Output.info('Listing projects...')
             for project in projects:
                 root = self._lcdb['projects'][project]['root']
-                Output.write("- %s: %s" %
-                             (color(project, ColorCodes.SUCCESS) if project == self._lcdb['active'] else project,
-                              color(root, ColorCodes.MUTED)))
-            Output.write("\nTotal %d projects listed." % len(projects))
-        
+                Output.write("[%s] %s: %s" %
+                             ('✓' if project == self._lcdb['active'] else ' ', project, color(root, Output.MUTED)))
+            Output.normal("\nTotal %d projects listed." % len(projects))
+
         except ProjectNotFoundException as error:
-            Output.write(error, ColorCodes.WARNING)
-    
+            Output.danger(error)
+
     def clear(self, key):
         """
         Remove a project along with it's instances from the list.
@@ -305,24 +305,23 @@ class ProjectController:
             if key not in self._lcdb['projects'].keys():
                 raise ProjectNotFoundException(
                     'Project is not found in the list.')
-            
+
             # Ask for confirmation
-            Output.write(
-                "Caution! This cannot be undone. Do you want to proceed? (yes/no)[no]:", ColorCodes.DANGER)
+            Output.warning(
+                "Caution! This cannot be undone. Do you want to proceed? (yes/no)[no]:")
             yes = {'yes', 'y'}
             decision = input(">> ")
             if decision not in yes:
                 raise KeyboardInterrupt("Aborted! Nothing is changed.")
-            
+
             # If the key is the active project, set active project empty
             if key == self._lcdb['active']:
                 self._lcdb['active'] = ''
-            
+
             del self._lcdb['projects'][key]
-            Output.write("%s is removed from LordCommander." %
-                         key, ColorCodes.SUCCESS)
-        
+            Output.success("%s is removed from LordCommander." % key)
+
         except ProjectNotFoundException as error:
-            Output.write(error, ColorCodes.DANGER)
+            Output.danger(error)
         except KeyboardInterrupt as error:
-            Output.write(error, ColorCodes.DANGER)
+            Output.danger(error)

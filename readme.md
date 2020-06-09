@@ -7,9 +7,8 @@ Requirements
 
 - ^Python 3.7.5
 - [Python Fire](https://github.com/google/python-fire)
-- [Pipenv](https://github.com/pypa/pipenv)
 
-**However, from version 4.1.1 a `requirements.txt` file has been provided to use without Pipenv.**
+You also can use it using Pipenv, a `Pipfile` is provided along with the project.
 
 For full changelog, please see [this file](changelog.md).
 
@@ -50,7 +49,7 @@ To see added projects to LordCommander, run:
 ./lc proj view
 ```
 
-The active project will be colored in green.
+The active project will be check marked.
 
 #### Add new project
 
@@ -246,16 +245,3 @@ before you restore.
 ```
 ./lc utils restore /home/sowrensen/lcdb_dump.json
 ```
-
-Future Improvements
------
-
-** These may or may not be implemented.
-
-- ~~Add counter for successful runs and failed runs.~~ ✔️
-- ~~Count directories.~~ ✔️
-- ~~One instance of LordCommander for all projects.~~ ✔️
-- ~~Use SQLite3 instead of Shelve.~~ ❌
-- ~~Show index in search result. e.g. (`./lc utils search demo //Found! (Index: 3)`)~~ ✔️
-- ~~Specify indices to exclude during a command execution. e.g. (`./lc run pwd --ex=3,5`)~~ ✔️
-- Fixing foreground colors for light color schemes.

@@ -18,6 +18,7 @@ Changelog
 - Added a `requirements.txt` for using without `Pipenv`. (v4.1.1)
 - Added option to see application version. (v4.1.1)
 - Minor fixes and code refactoring. (v4.1.1)
+- Fixed color contrast for light terminal color scheme. 🌈 (v4.1.2)
 
 #### Version 3.x
 
