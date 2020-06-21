@@ -12,13 +12,14 @@ Changelog
 - Bug fixes and performance improvements. (v4.0)
 - Minor fixes. (v4.0.1)
 - Searching for a directory/instance now also shows the index. (v4.1.0)
-- Specific directory/instance now can be excluded during execution. See
-[Running Commands](readme.md#exclude-directoryinstance-from-execution) section. (v4.1.0)
+- Specific directory/instance now can be excluded during execution. See [Running Commands](readme.md#exclude-directoryinstance-from-execution) section. (v4.1.0)
 - Project root is now shown beside project name. 📂 (v4.1.1)
 - Added a `requirements.txt` for using without `Pipenv`. (v4.1.1)
 - Added option to see application version. (v4.1.1)
 - Minor fixes and code refactoring. (v4.1.1)
 - Fixed color contrast for light terminal color scheme. 🌈 (v4.1.2)
+- New option to run command for specific directories/instances only.🏷 See [Running Commands](readme.md#exclude-directoryinstance-from-execution) section. (v4.2.0)
+- Listing instances now shows indices also. (v4.2.0)
 
 #### Version 3.x
 

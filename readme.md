@@ -104,7 +104,7 @@ operations.
 ./lc dirs view
 ```
 
-This will show all saved directory names as their insertion order. To sort directory names alphabetically,
+This will show all saved directory names with the index as their insertion order. To sort directory names alphabetically,
 append `sort`  or `--sort` after list.
 
 ```
@@ -198,6 +198,18 @@ To exclude one or more particular directories/instances from execution, you can 
 ```
 
 Thus, directories in index 3 and 8 will be excluded from the list during execution.
+
+#### Run only for specified directories
+
+Like exclusion, you only can run a command for desired instances. Add `--inc` flag with indices for that, e.g.:
+
+```
+./lc run <command> --inc=3,8
+``` 
+
+The command will run for index 3 and 8 only. 
+
+> **NOTE**: The `--ex` and the `--inc` flag takes precedence over `li` and `ui`. That is to say, if you use `--ex` with `li` and `ui`, indices specified will be _excluded_. And in case of `--inc`, _only for instances within the indices_ the command will run. Also, you should not use `--ex` and `--inc` together.   
 
 -----
 

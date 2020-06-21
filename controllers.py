@@ -15,7 +15,6 @@
 """
 
 import os
-import time
 from lcex import *
 from colr import color
 from pathlib import Path
@@ -72,9 +71,9 @@ class DirectoryController:
 
             Output.info('Listing directories...')
             directories = self._instances.copy()
-            Output.normal("{}\n".format(
-                '\n'.join(
-                    ('- ' + ins for ins in sorted(directories)) if sort else ('- ' + ins for ins in directories))))
+            for directory in sorted(directories) if sort else directories:
+                print("- {} ({})".format(directory, directories.index(directory)))
+            print("\n")
             Output.normal("Total %d directories listed." % len(directories))
         except ActiveProjectNotSetException as error:
             Output.danger(error)
@@ -135,7 +134,7 @@ class CommandController:
     Stirs the command executor.
     """
 
-    def run(self, project, cmd, li=0, ui=None, ex=()):
+    def run(self, project, cmd, li=0, ui=None, ex=(), inc=()):
         """
         Run the command.
         :param project: The active project dictionary
@@ -143,14 +142,20 @@ class CommandController:
         :param li: Lower index (optional)
         :param ui: Upper index (optional)
         :param ex: Tuple of indices to exclude during execution (optional)
+        :param inc: Tuple of indices to include only during execution (optional)
         """
         try:
             succeeded = 0
             failed = 0
             # First, apply li and ui to slice instances/directories,
-            # then filter out by excluding according to ex
-            instances = [ins for ins in project['instances']
-                         [li:ui] if project['instances'].index(ins) not in ex]
+            # then filter out by excluding according to ex or
+            # including according to inc
+            if inc == ():
+                instances = [ins for ins in project['instances']
+                             [li:ui] if project['instances'].index(ins) not in ex]
+            else:
+                instances = [ins for ins in project['instances']
+                             [li:ui] if project['instances'].index(ins) in inc]
             instance_root = Path(project['root'])
 
             if len(instances) <= 0:
