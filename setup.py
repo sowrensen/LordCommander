@@ -39,6 +39,7 @@ setup(
     install_requires=[
         'Colr>=0.9.1',
         'fire>=0.2.1',
+        'pytest>=5.4.3'
     ],
     python_requires=">=3.7"
 )
