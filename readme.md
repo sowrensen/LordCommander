@@ -15,15 +15,15 @@ For full changelog, please see [this file](changelog.md).
 Initialization
 -----
 
-Run following commands to clone the repository and 
-install dependencies:
+Run following commands to clone the repository and install dependencies:
 
 ```
 git clone https://sowrensen@github.com/sowrensen/lordcommander.git
 cd lordcommander
-pipenv install
+python -m venv ./venv
+pip install -r requirements.txt
 chmod +x lc
-pipenv shell
+source ./venv/bin/activate
 ./lc <command> <args> <flags>
 ```
 

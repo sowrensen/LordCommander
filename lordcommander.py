@@ -1,12 +1,12 @@
 """
-| ---------------------------------------------------------------------
-| lordcommander.py
-| ---------------------------------------------------------------------
-| LordCommander (hence, lc) is a python program to run a shell
-| command recursively through predefined directories.
-|
-| Version: 4.x
-| License: GNU General Public License 3
+---------------------------------------------------------------------
+lordcommander.py
+---------------------------------------------------------------------
+LordCommander (hence, lc) is a python program to run a shell
+command recursively through predefined directories.
+
+Version: 4.x
+License: GNU General Public License 3
 """
 
 import os
@@ -87,4 +87,4 @@ class LordCommander:
 
     def version(self):
         """ Version of the application. """
-        return "4.2.0"
+        return "4.2.1"

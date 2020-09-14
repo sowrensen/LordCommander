@@ -20,6 +20,7 @@ Changelog
 - Fixed color contrast for light terminal color scheme. 🌈 (v4.1.2)
 - New option to run command for specific directories/instances only.🏷 See [Running Commands](readme.md#run-only-for-specified-directories) section. (v4.2.0)
 - Listing instances now shows indices also. (v4.2.0)
+- Some code style and documentation update. (v4.2.1)
 
 #### Version 3.x
 
