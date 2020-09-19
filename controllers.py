@@ -249,10 +249,11 @@ class ProjectController:
         except ProjectNotFoundException as error:
             Output.danger(error)
     
-    def add(self, strpath):
+    def add(self, strpath, name=None):
         """
         Add new project.
-        :param strpath: The absolute path to the project.
+        :param strpath: The absolute path to the project
+        :param name: The name of the project, if not specified, it will be taken from path
         """
         try:
             if not os.path.isabs(strpath):
@@ -264,8 +265,9 @@ class ProjectController:
                     "Provided path does not exist, please enter a valid path.")
             
             path = Path(strpath)
+            project_name = name if name else path.stem
             # Exit if already exists
-            if path.stem in self._lcdb['projects'].keys():
+            if project_name in self._lcdb['projects'].keys():
                 Output.danger("Project already exists!")
                 return
 
@@ -274,8 +276,8 @@ class ProjectController:
                 'root': str(path),
                 'instances': []
             }
-            self._lcdb['projects'][path.stem] = data
-            Output.success("%s is added to project list." % path.stem)
+            self._lcdb['projects'][project_name] = data
+            Output.success("%s is added to project list." % project_name)
         
         except NotAnAbsolutePathException as error:
             Output.danger(error)

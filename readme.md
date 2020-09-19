@@ -53,29 +53,35 @@ The active project will be check marked.
 
 #### Add new project
 
-To add a new project, you have to specify the path of the project directory. *Remember, 
-this is not the location of individual project, i.e. directories where the command
-will run are inside this location.* Run:
+To add a new project, you have to specify the path of the project directory. Usually the last part of the path is taken as the project name but you can specify a custom name for the project using the `--name` flag. *Remember, this is not the location of individual project, i.e. directories where the command will run are inside this location.* Run:
 
 ```
-./lc proj add /home/sowrensen/test/project-a
+./lc proj add /home/sowrensen/test/project-a --name=customname
 ```
 
 This will create the following data structure in the shelve module:
+
+```
+'customname': {
+    'root': '/home/sowrensen/test/project-a',
+    'instances': []
+}
+```
+
+Without the `--name` flag, it will be,
 
 ```
 'project-a': {
     'root': '/home/sowrensen/test/project-a',
     'instances': []
 }
-```
+``` 
 
 Later in the `instances` list, you will add your project instances using `dirs add` command.
 
 #### Set or change active project
 
-To set or change active project, you must have at least one project. After adding
-projects, run:
+To set or change active project, you must have at least one project. After adding projects, run:
 
 ```
 ./lc proj active project-a
@@ -89,10 +95,7 @@ To remote a project from LordCommander, run:
 ./lc proj clear project-a
 ```
 
-The program will ask for your confirmation, if you allow it will remove entire project
-along with it's added instances. If a project is set as active during removal, the
-`active` key will set to null and you have to set an active project for further
-operations.
+The program will ask for your confirmation, if you allow it will remove entire project along with it's added instances. If a project is set as active during removal, the `active` key will set to null and you have to set an active project for further operations.
 
 -----
 
@@ -104,8 +107,7 @@ operations.
 ./lc dirs view
 ```
 
-This will show all saved directory names with the index as their insertion order. To sort directory names alphabetically,
-append `sort`  or `--sort` after list.
+This will show all saved directory names with the index as their insertion order. To sort directory names alphabetically, append `sort`  or `--sort` after list.
 
 ```
 ./lc dirs view [sort|--sort]
@@ -125,8 +127,7 @@ All the directory names after `add` keyword will be appended to the directory li
 ./lc dirs clear [dir1 dir2 dir3...]
 ```
 
-Add desired directory names after `clear` to remove them from list. However, you can also clear the entire list
-of directories if you specify `--full` after `clear`.
+Add desired directory names after `clear` to remove them from list. However, you can also clear the entire list of directories if you specify `--full` after `clear`.
 
 ```
 ./lc dirs clear --full
@@ -144,20 +145,13 @@ Running a command throughout the saved directories is easy. Here's an example:
 ./lc run pwd
 ```
 
-That's it! It will recursively run for each saved directories and show the output. 
-Afterwards, you will see the number of successful and failed runs. 
+That's it! It will recursively run for each saved directories and show the output.  Afterwards, you will see the number of successful and failed runs. 
 
-> **Note:** If your command is more than one word, you have to wrap it around with 
-> single or double quote. An example can be `./lc run 'git status'`. 
+> **Note:** If your command is more than one word, you have to wrap it around with single or double quote. An example can be `./lc run 'git status'`. 
 
 #### Throttled execution
 
-Now, if you have a huge list of directories and you don't want to run the command altogether, 
-you can slice them by indices (I assume that you're familiar with how array or list index works). 
-If you run `./lc run --help` you will see two flags `--li` and `--ui` respectively for 
-**lower index** and **upper index**. So if you decide to run a command only to first 
-50 directories, you can simply specify `--li=0` and `--ui=50`. Or even simpler, 
-just mention `--ui=50`, it will run throughout index 0 to index 49 anyway.
+Now, if you have a huge list of directories and you don't want to run the command altogether,  you can slice them by indices (I assume that you're familiar with how array or list index works). If you run `./lc run --help` you will see two flags `--li` and `--ui` respectively for **lower index** and **upper index**. So if you decide to run a command only to first 50 directories, you can simply specify `--li=0` and `--ui=50`. Or even simpler, just mention `--ui=50`, it will run throughout index 0 to index 49 anyway.
 
 ```
 ./lc run <command> --li=0 --ui=50
@@ -186,8 +180,7 @@ or,
 ./lc run <command> 50
 ```
 
-Yes, you don't have to remember or know how any items are in your list. Just tell the program to 
-run it from 50 and it will start right there and won't stop until it reaches the end of the list. 
+Yes, you don't have to remember or know how any items are in your list. Just tell the program to run it from 50 and it will start right there and won't stop until it reaches the end of the list. 
 
 #### Exclude directory/instance from execution
 
@@ -215,20 +208,17 @@ The command will run for index 3 and 8 only.
 
 ### Utilities 
 
-From version 3.0, a utility class has been added to run some handy tasks. Right now there are four 
-commands, more will be introduced over time.
+From version 3.0, a utility class has been added to run some handy tasks. Right now there are four commands, more will be introduced over time.
 
 #### Searching for a directory
 
-Forgot if a directory name has already been included or not? Just tell the program to look for it, 
-it will tell you if it is there or not.
+Forgot if a directory name has already been included or not? Just tell the program to look for it, it will tell you if it is there or not.
 
 ```
 ./lc utils search <directory_name>
 ```
 
-> **Note**: It is case sensitive, so if you have a directory named `ABC` and your search string 
-> is `abc`, you will get a negative result.
+> **Note**: It is case sensitive, so if you have a directory named `ABC` and your search string is `abc`, you will get a negative result.
 
 #### Seeing total number of directories
 
@@ -240,19 +230,15 @@ If you're wondering how many saved directories do you have, just tell LordComman
 
 #### Dumping and restoring data using JSON file
 
-With version 4.0, you can dump and restore data of LordCommander. To dump existing data in the 
-shelve module, run:
+With version 4.0, you can dump and restore data of LordCommander. To dump existing data in the shelve module, run:
 
 ```
 ./lc utils dump /home/sowrensen
 ```
 
-The third argument is the location where you want to save the file. There you will find a file named
-`lcdb_dump.json`. You can use that file later to restore data into shelve module. To restore from a 
-JSON file, run following command with the file path as third argument.
+The third argument is the location where you want to save the file. There you will find a file named `lcdb_dump.json`. You can use that file later to restore data into shelve module. To restore from a JSON file, run following command with the file path as third argument.
 
->**Note:** Restoring data will replace existing data. It is a good idea to dump
-before you restore.
+>**Note:** Restoring data will replace existing data. It is a good idea to dump before you restore.
 
 ```
 ./lc utils restore /home/sowrensen/lcdb_dump.json
