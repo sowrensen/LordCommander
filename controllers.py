@@ -334,3 +334,23 @@ class ProjectController:
             Output.danger(error)
         except KeyboardInterrupt as error:
             Output.danger(error)
+            
+    def rename(self, oldname, newname):
+        """
+        Rename an existing project.
+        :param oldname: Current name of the project
+        :param newname: New name of the project
+        """
+        try:
+            if oldname not in self._lcdb['projects'].keys():
+                raise ProjectNotFoundException(
+                    'Project is not found in the list.')
+            
+            self._lcdb['projects'][newname] = self._lcdb['projects'][oldname]
+            del self._lcdb['projects'][oldname]
+            
+            if oldname == self._lcdb['active']:
+                self._lcdb['active'] = newname
+            Output.success("Project %s is renamed to %s." % (oldname, newname))
+        except ProjectNotFoundException as error:
+            Output.danger(error)

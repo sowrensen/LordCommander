@@ -89,13 +89,23 @@ To set or change active project, you must have at least one project. After addin
 
 #### Remove a project
 
-To remote a project from LordCommander, run:
+To remove a project from LordCommander, run:
 
 ```
 ./lc proj clear project-a
 ```
 
 The program will ask for your confirmation, if you allow it will remove entire project along with it's added instances. If a project is set as active during removal, the `active` key will set to null and you have to set an active project for further operations.
+
+#### Rename a project
+
+To rename a project, run:
+
+```
+./lc proj rename oldname newname
+```
+
+If the project you renaming are the one currently marked as active, it will automatically update the name of the active project.
 
 -----
 
