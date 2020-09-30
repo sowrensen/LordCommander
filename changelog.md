@@ -20,6 +20,9 @@ Changelog
 - Fixed color contrast for light terminal color scheme. 🌈 (v4.1.2)
 - New option to run command for specific directories/instances only.🏷 See [Running Commands](readme.md#run-only-for-specified-directories) section. (v4.2.0)
 - Listing instances now shows indices also. (v4.2.0)
+- Some code style and documentation update. (v4.2.1)
+- Set a custom name for a project. See [Adding New Project](readme.md#add-new-project) section. 🗃️ (v4.2.2) 
+- Ability to rename a project. (v4.2.3)
 
 #### Version 3.x
 

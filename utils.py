@@ -1,12 +1,12 @@
 """
-| ---------------------------------------------------------------------
-| utils.py
-| ---------------------------------------------------------------------
-| This utils module holds some of the necessary functions that may
-| require over time to time.
-|
-| Version: 4.x
-| License: GNU General Public License 3
+---------------------------------------------------------------------
+utils.py
+---------------------------------------------------------------------
+This utils module holds some of the necessary functions that may
+require over time to time.
+
+Version: 4.x
+License: GNU General Public License 3
 """
 import os
 import json

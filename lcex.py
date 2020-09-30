@@ -1,11 +1,11 @@
 """
-| ---------------------------------------------------------------------
-| lcex.py
-| ---------------------------------------------------------------------
-| This module defines custom exceptions used in LordCommander.
-|
-| Version: 4.x
-| License: GNU General Public License 3
+---------------------------------------------------------------------
+lcex.py
+---------------------------------------------------------------------
+This module defines custom exceptions used in LordCommander.
+
+Version: 4.x
+License: GNU General Public License 3
 """
 
 
