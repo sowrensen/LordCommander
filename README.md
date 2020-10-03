@@ -2,8 +2,12 @@
 
 LordCommander is a command line program to run shell commands recursively through predefined directories.
 
-- [Requirements](#requirements)
-- [Initialization](#initialization)
+See full [changelog here](changelog.md).
+
+### Contents
+- [Dependencies](#dependencies)
+- [Installation](#installation)
+- [Upgrading from v4.x to v5.x](#upgrading-from-v4x-to-v5x)
 - [Usage](#usage)
     - [Project handling](#project-handling)
         - [See project list](#see-project-list)
@@ -11,32 +15,55 @@ LordCommander is a command line program to run shell commands recursively throug
         - [Set/Change active project](#set-or-change-active-project)
         - [Remove a project](#remove-a-project)
         - [Rename a project](#rename-a-project)
-    - [Directory/Instance handling](#directory-handling)
+    - [Directory/Instance handling](#directoryinstance-handling)
+        - [See directory list](#see-directory-list)
+        - [Adding directories](#adding-directories)
+        - [Removing directories](#removing-directories)
+    - [Running commands](#running-commands)
+        - [Throttled execution](#throttled-execution)
+        - [Exclude directories from execution](#exclude-directoryinstance-from-execution)
+        - [Run only for specified directories](#run-only-for-specified-directories)
+    - [Utilities](#utilities)
+        - [Searching for a directory](#searching-for-a-directory)
+        - [See total number of directories](#seeing-total-number-of-directories)
+        - [Dumping and restoring data](#dumping-and-restoring-data-using-json-file)
+        
 
-Requirements
+Dependencies
 -----
 
 - ^Python 3.7.5
 - [Python Fire](https://github.com/google/python-fire)
+- [Colr](https://github.com/welbornprod/colr)
 
-You also can use it using Pipenv, a `Pipfile` is provided along with the project.
 
-For full changelog, please see [this file](changelog.md).
-
-Initialization
+Installation
 -----
 
-Run following commands to clone the repository and install dependencies:
+Run following command to install LordCommander:
 
 ```
-git clone https://sowrensen@github.com/sowrensen/lordcommander.git
-cd lordcommander
-python -m venv ./venv
-pip install -r requirements.txt
-chmod +x lc
-source ./venv/bin/activate
-./lc <command> <args> <flags>
+pip install lordcommander
 ```
+
+It will be available as `lc` in your environment, and you can run commands like:
+
+```bash
+lc <command> <args> <flags>
+```
+
+Upgrading from v4.x to v5.x
+-----
+
+Since version 5.x  LordCommander will be a python package instead of individual project and the data directory is changed as a standard package should behave. Here is how you should upgrade to 5.x:
+
+First, take a backup of your data
+
+```bash
+./lc utils dump ~/
+```
+
+It would create a `lcdb_dump.json` file in your home directory. After that, remove existing `LordCommander` folder and install it using pip. Henceforth, you can restore data using the backup file just as before. The commands remain same.
 
 Usage
 -----
@@ -120,7 +147,7 @@ If the project you renaming are the one currently marked as active, it will auto
 
 -----
 
-### Directory Handling
+### Directory/Instance Handling
 
 #### See directory list
 
