@@ -2,6 +2,17 @@
 
 LordCommander is a command line program to run shell commands recursively through predefined directories.
 
+- [Requirements](#requirements)
+- [Initialization](#initialization)
+- [Usage](#usage)
+    - [Project handling](#project-handling)
+        - [See project list](#see-project-list)
+        - [Add new project](#add-new-project)
+        - [Set/Change active project](#set-or-change-active-project)
+        - [Remove a project](#remove-a-project)
+        - [Rename a project](#rename-a-project)
+    - [Directory/Instance handling](#directory-handling)
+
 Requirements
 -----
 
