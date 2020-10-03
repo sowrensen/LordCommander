@@ -5,14 +5,15 @@ utils.py
 This utils module holds some of the necessary functions that may
 require over time to time.
 
-Version: 4.x
+Version: 5.x
 License: GNU General Public License 3
 """
-import os
 import json
+import os
 from pathlib import Path
-from output import Output
-from lcex import ActiveProjectNotSetException
+
+from lordcommander.lcex import ActiveProjectNotSetException
+from lordcommander.output import Output
 
 
 class Utils:

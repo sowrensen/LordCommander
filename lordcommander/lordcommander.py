@@ -5,23 +5,27 @@ lordcommander.py
 LordCommander (hence, lc) is a python program to run a shell
 command recursively through predefined directories.
 
-Version: 4.x
+Version: 5.x
 License: GNU General Public License 3
 """
 
 import os
 import shelve
-from utils import Utils
-from output import Output
-from lcex import ActiveProjectNotSetException
-from controllers import DirectoryController, CommandController, ProjectController
+from pathlib import Path
+
+from fire import Fire
+
+from .controllers import CommandController, DirectoryController, ProjectController
+from .lcex import ActiveProjectNotSetException
+from .output import Output
+from .utils import Utils
 
 
 class LordCommander:
     """
     🐈 Run shell commands recursively throughout the predefined directories.
     """
-
+    
     def __init__(self):
         try:
             self._lcdb = self._read_data()
@@ -32,34 +36,34 @@ class LordCommander:
                 self._active['instances'] if 'instances' in self._active else None)
         except IOError as error:
             Output.danger(error)
-
+    
     def __del__(self):
         # Close the shelve module
         self._lcdb.close()
-
+    
     def _read_data(self):
         """
         Load the shelve module and create expected structure if necessary.
         :return: shelve
         """
-        if not os.path.exists('.files'):
-            os.mkdir('.files')
-
+        if not os.path.exists('../.files'):
+            os.mkdir('../.files')
+        
         # Setting writeback mode to True to persist changes.
-        lcdb = shelve.open('.files/lcdb', writeback=True)
+        lcdb = shelve.open('../.files/lcdb', writeback=True)
         if not all(key in lcdb.keys() for key in ['active', 'projects']):
             lcdb['active'] = ''
             lcdb['projects'] = {}
-
+        
         return lcdb
-
+    
     def _find_active(self):
         """
         Get the active project
         :return: dict
         """
         return self._lcdb['projects'][self._lcdb['active']] if self._lcdb['active'] != '' else {}
-
+    
     def run(self, command, li=0, ui=None, ex=(), inc=()):
         """
         Run a command.
@@ -84,7 +88,12 @@ class LordCommander:
             Output.danger(error)
         except SyntaxError as error:
             Output.danger(error)
-
+    
     def version(self):
         """ Version of the application. """
-        return "4.2.3"
+        root = Path(__file__).parent.parent.resolve()
+        return (root / 'version.txt').read_text(encoding='utf-8')
+
+
+def main():
+    Fire(LordCommander)

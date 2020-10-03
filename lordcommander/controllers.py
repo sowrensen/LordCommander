@@ -10,15 +10,17 @@ command throughout the saved directories using saved credentials.
 And the ProjectController class manipulates all project related
 tasks like setting active project and adding new projects.
 
-Version: 4.x
+Version: 5.x
 License: GNU General Public License 3
 """
 
 import os
-from lcex import *
-from colr import color
 from pathlib import Path
-from output import Output
+
+from colr import color
+
+from lordcommander.lcex import *
+from lordcommander.output import Output
 
 
 class DirectoryController:

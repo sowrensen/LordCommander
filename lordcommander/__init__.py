@@ -1,2 +1,4 @@
-__version_info__ = (5, 0, 0)
-__version__ = '{0}.{1}.{2}'.format(*__version_info__)
+from .lordcommander import main
+
+if __name__ == "__main__":
+    main()

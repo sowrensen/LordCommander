@@ -5,7 +5,7 @@ output.py
 This module provides a fancy way to show output, errors, warnings,
 or info on CLI.
 
-Version: 4.x
+Version: 5.x
 License: GNU General Public License 3
 """
 

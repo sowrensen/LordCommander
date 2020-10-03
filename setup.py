@@ -1,19 +1,30 @@
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+import pathlib
 
-from lordcommander import __version__
+from setuptools import find_packages, setup
 
-with open("readme.md", "r") as readme:
-    long_description = readme.read()
-    
+root = pathlib.Path(__file__).parent.resolve()
+
+long_description = (root / 'README.md').read_text(encoding='utf-8')
+version = (root / 'version.txt').read_text(encoding='utf-8')
 
 setup(
     name='lordcommander',
     description='Run shell commands recursively throughout the predefined directories',
-    packages=['lordcommander'],
-    version=__version__,
+    packages=find_packages(),
+    version=version,
+    entry_points={
+        'console_scripts': [
+            'lc=lordcommander:main',
+        ],
+    },
+    install_requires=[
+        'colr >= 0.9',
+        'fire >= 0.2',
+    ],
+    tests_require=[
+        'pytest>=5.4.3'
+    ],
+    python_requires=">=3.7",
     author='Sowren Sen',
     author_email='sowrensen@gmail.com',
     url='https://github.com/sowrensen/LordCommander',
@@ -35,11 +46,5 @@ setup(
         "Topic :: System :: Shells",
         "Topic :: System :: Installation/Setup",
         "Topic :: Terminals",
-    ],
-    install_requires=[
-        'Colr>=0.9.1',
-        'fire>=0.2.1',
-        'pytest>=5.4.3'
-    ],
-    python_requires=">=3.7"
+    ]
 )
