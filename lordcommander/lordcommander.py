@@ -14,6 +14,7 @@ import shelve
 from pathlib import Path
 
 from fire import Fire
+from appdirs import user_data_dir
 
 from .controllers import CommandController, DirectoryController, ProjectController
 from .lcex import ActiveProjectNotSetException
@@ -40,17 +41,22 @@ class LordCommander:
     def __del__(self):
         # Close the shelve module
         self._lcdb.close()
+        
+    def _create_data_dir(self):
+        """Create the data directory."""
+        data_dir = user_data_dir('LordCommander')
+        if not os.path.exists(data_dir):
+            os.mkdir(data_dir)
+        return data_dir
     
     def _read_data(self):
         """
         Load the shelve module and create expected structure if necessary.
         :return: shelve
         """
-        if not os.path.exists('../.files'):
-            os.mkdir('../.files')
-        
+        data_dir = self._create_data_dir()
         # Setting writeback mode to True to persist changes.
-        lcdb = shelve.open('../.files/lcdb', writeback=True)
+        lcdb = shelve.open(data_dir + '/lcdb', writeback=True)
         if not all(key in lcdb.keys() for key in ['active', 'projects']):
             lcdb['active'] = ''
             lcdb['projects'] = {}

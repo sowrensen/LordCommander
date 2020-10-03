@@ -1,8 +1,8 @@
-import pathlib
+from pathlib import Path
 
 from setuptools import find_packages, setup
 
-root = pathlib.Path(__file__).parent.resolve()
+root = Path(__file__).parent.resolve()
 
 long_description = (root / 'README.md').read_text(encoding='utf-8')
 version = (root / 'version.txt').read_text(encoding='utf-8')
@@ -20,9 +20,10 @@ setup(
     install_requires=[
         'colr >= 0.9',
         'fire >= 0.2',
+        'appdirs>=1.4'
     ],
     tests_require=[
-        'pytest>=5.4.3'
+        'pytest>=5.4.3',
     ],
     python_requires=">=3.7",
     author='Sowren Sen',
