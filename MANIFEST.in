@@ -3,3 +3,4 @@ include README.md
 include changelog.md
 include requirements.txt
 include version.txt
+recursive-exclude test *

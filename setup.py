@@ -10,7 +10,7 @@ version = (root / 'version.txt').read_text(encoding='utf-8')
 setup(
     name='lordcommander',
     description='Run shell commands recursively throughout the predefined directories',
-    packages=find_packages(),
+    packages=find_packages(exclude=['test.*', 'test', 'docs.*', 'docs']),
     version=version,
     entry_points={
         'console_scripts': [
