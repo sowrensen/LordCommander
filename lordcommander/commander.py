@@ -27,9 +27,10 @@ class LordCommander:
     🐈 Run shell commands recursively throughout the predefined directories.
     """
     
-    def __init__(self):
+    def __init__(self, lcdb):
         try:
-            self._lcdb = self._read_data()
+            # self._lcdb = self._read_data()
+            self._lcdb = lcdb
             self._active = self._find_active()
             self.proj = ProjectController(self._lcdb)
             self.utils = Utils(self._lcdb, self._active)
@@ -41,27 +42,6 @@ class LordCommander:
     def __del__(self):
         # Close the shelve module
         self._lcdb.close()
-        
-    def _create_data_dir(self):
-        """Create the data directory."""
-        data_dir = user_data_dir('LordCommander')
-        if not os.path.exists(data_dir):
-            os.mkdir(data_dir)
-        return data_dir
-    
-    def _read_data(self):
-        """
-        Load the shelve module and create expected structure if necessary.
-        :return: shelve
-        """
-        data_dir = self._create_data_dir()
-        # Setting writeback mode to True to persist changes.
-        lcdb = shelve.open(data_dir + '/lcdb', writeback=True)
-        if not all(key in lcdb.keys() for key in ['active', 'projects']):
-            lcdb['active'] = ''
-            lcdb['projects'] = {}
-        
-        return lcdb
     
     def _find_active(self):
         """
@@ -101,5 +81,30 @@ class LordCommander:
         return (root / 'version.txt').read_text(encoding='utf-8')
 
 
-def main():
-    Fire(LordCommander)
+def create_data_dir():
+    """Create the data directory."""
+    data_dir = user_data_dir('LordCommander')
+    if not os.path.exists(data_dir):
+        os.mkdir(data_dir)
+    return data_dir
+
+
+def read_data():
+    """
+    Load the shelve module and create expected structure if necessary.
+    :return: shelve
+    """
+    data_dir = create_data_dir()
+    # Setting writeback mode to True to persist changes.
+    lcdb = shelve.open(data_dir + '/lcdb', writeback=True)
+    if not all(key in lcdb.keys() for key in ['active', 'projects']):
+        lcdb['active'] = ''
+        lcdb['projects'] = {}
+    
+    return lcdb
+
+
+def main(db=None):
+    if db is None:
+        lcdb = read_data()
+    Fire(LordCommander(lcdb))
