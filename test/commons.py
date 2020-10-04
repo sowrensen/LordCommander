@@ -44,6 +44,21 @@ def generate_dummy_data_with_no_instance():
         }
     }
     set_dummy_data(data)
+    
+
+def generate_dummy_data_with_one_instance():
+    remove_test_files()
+    (pro_path, pro_name, ins_name) = create_a_new_project()
+    data = {
+        "active": "project3",
+        "projects": {
+            pro_name: {
+                "root": pro_path,
+                "instances": [ins_name]
+            }
+        }
+    }
+    set_dummy_data(data)
 
 
 def create_a_new_project():
