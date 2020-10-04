@@ -8,6 +8,7 @@
 - [x] Show index in search result. e.g. (`./lc utils search demo //Found! (Index: 3)`)
 - [x] Specify indices to exclude during a command execution. e.g. (`./lc run pwd --ex=3,5`)
 - [x] Fixing foreground colors for light color schemes
-- [ ] ~~A way to write output log.~~
+- [x] Replace all `./lc` with `lc` in **README.md**.
+- [ ] Write tests.
 
 ***These things may or may not be implemented.*
