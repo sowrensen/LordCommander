@@ -7,11 +7,11 @@ Changelog
 
 - Yep, LordCommander is now a standalone python package which can be installed using **pip**. 🐉 (v5.0.0)
 - Instead of saving shelve module inside the package directory (`.files`), it now uses user data folder. (v5.0.0)
-- Removed `lc version` command. (v5.0.0)
 - Renamed module `lordcommander` to `commander` as the main package is named LordCommander. (v5.0.0)
 - `_create_data_dir()` and `_read_data()` methods are removed from `LordCommander` class and rewritten as independent functions. (v5.0.0)
 - The shelve module to store data now can be passed from outside of the `LordCommander` class via constructor, which helps changing module for testing. (v5.0.0)
 - Tests are added, a debt has been paid. More to go. (v5.0.0)
+- Removed `lc version` command. (v5.0.1)
 
 #### Version 4.x
 

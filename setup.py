@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 root = Path(__file__).parent.resolve()
 
 long_description = (root / 'README.md').read_text(encoding='utf-8')
-__version_info__ = (5, 0, 0)
+__version_info__ = (5, 0, 1)
 __version__ = "{}.{}.{}".format(*__version_info__)
 
 setup(
