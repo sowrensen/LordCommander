@@ -2,7 +2,7 @@
 
 LordCommander is a command line program to run shell commands recursively through predefined directories.
 
-See full [changelog here](changelog.md).
+See full [changelog here](https://github.com/sowrensen/LordCommander/blob/master/changelog.md).
 
 ### Contents
 - [Dependencies](#dependencies)

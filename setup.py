@@ -5,13 +5,14 @@ from setuptools import find_packages, setup
 root = Path(__file__).parent.resolve()
 
 long_description = (root / 'README.md').read_text(encoding='utf-8')
-version = (root / 'version.txt').read_text(encoding='utf-8')
+__version_info__ = (5, 0, 0)
+__version__ = "{}.{}.{}".format(*__version_info__)
 
 setup(
     name='lordcommander',
     description='Run shell commands recursively throughout the predefined directories',
     packages=find_packages(exclude=['test.*', 'test', 'docs.*', 'docs']),
-    version=version,
+    version=__version__,
     entry_points={
         'console_scripts': [
             'lc=lordcommander:main',

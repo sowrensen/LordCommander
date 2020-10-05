@@ -11,10 +11,9 @@ License: GNU General Public License 3
 
 import os
 import shelve
-from pathlib import Path
 
-from fire import Fire
 from appdirs import user_data_dir
+from fire import Fire
 
 from .controllers import CommandController, DirectoryController, ProjectController
 from .lcex import ActiveProjectNotSetException
@@ -74,11 +73,6 @@ class LordCommander:
             Output.danger(error)
         except SyntaxError as error:
             Output.danger(error)
-    
-    def version(self):
-        """ Version of the application. """
-        root = Path(__file__).parent.parent.resolve()
-        return (root / 'version.txt').read_text(encoding='utf-8')
 
 
 def create_data_dir():
